@@ -1,0 +1,12 @@
+.app-header {
+  position: fixed;
+  top: 0;
+  padding: 10px;
+  height: 70px;
+  width: 100%;
+  background-color: #fff;
+  z-index: 1;
+  img {
+    margin: 0 15px;
+  }
+}

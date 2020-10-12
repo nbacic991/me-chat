@@ -1,0 +1,70 @@
+<div class="login-comp">
+  <div class="comp-wrapper d-flex">
+    <aside class="col-md-4">
+      <img class="me-main-logo" src="./assets/img/login/me_logo.png" alt="MaterialExchange Login">
+      <div class="inner-content">
+        <h1>Welcome</h1>
+        <p>Please login to your account</p>
+        <form #userForm="ngForm" (ngSubmit)="formSubmit()">
+          <div class="form-group">
+            <input type="text" required #name="ngModel"
+                   [class.is-invalid]="name.invalid && name.touched"
+                   class="form-control"
+                   placeholder="Username or Email"
+                   name="userName" id="userName" [(ngModel)]="userModel.name"/>
+                      <small class="text-danger" [class.d-none]="name.valid || name.untouched">Name is required.</small>
+<!--            <div *ngIf="name.errors && (name.invalid || name.touched)">-->
+<!--              <small class="text-danger" *ngIf="name.errors.required">Name is required.</small>-->
+<!--            </div>-->
+          </div>
+
+          <div class="form-group">
+            <input type="password" required #password="ngModel" class="form-control"
+                   placeholder="Password"
+                   name="password" id="password" [(ngModel)]="userModel.password"/>
+            <small class="text-danger" [class.d-none]="password.valid || password.untouched">Password is required.</small>
+          </div>
+          <button class="btn btn-primary" type="submit">Login</button>
+        </form>
+        <div class="d-flex under-form-control">
+          <a href="#">Sign Up</a>
+          <a href="#">Forgot password?</a>
+        </div>
+        <div class="service-list">
+          <ul>
+            <li><img src="./assets/img/login/dollar-sign.svg" alt="">Reduce <b>Costs</b></li>
+            <li><img src="./assets/img/login/clock.svg" alt=""><b>Shorten</b> Product Development Timescales</li>
+            <li><img src="./assets/img/login/repeat.svg" alt="">Improve Global <b>Collaboration</b></li>
+            <li><img src="./assets/img/login/feather.svg" alt="">Sustainability</li>
+          </ul>
+        </div>
+        <div class="privacy-notice">
+          <p>We do take care about your personal data, so please read our <a href="#">Privacy Notice</a>.</p>
+        </div>
+        <div class="sponsors">
+          <img src="./assets/img/login/fdra_usfia.svg" alt="">
+          <p>Don't have an account yet? <a href="#">Join Material Exchange</a></p>
+        </div>
+        <div class="copyright text-center">
+          &copy; 2020 | All Rights Reserved | Material Exchange Ventures AB
+        </div>
+      </div>
+    </aside>
+    <main></main>
+  </div>
+</div>
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Bootstrap Modal</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    This is example from ItSolutionStuff.com
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>
+  </div>
+</ng-template>
+

@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url('../assets/fonts/Roboto/Roboto-Regular.ttf') format("truetypefont");
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('../assets/fonts/Open_Sans/OpenSans-Regular.ttf') format("truetypefont");
+}
+
+html,
+body {
+  margin: auto 0;
+  font-family: 'Roboto', sans-serif;
+}
+input::-moz-placeholder,
+input::placeholder {
+  color: #BBBBBB;
+}
+input:focus {
+  outline: 0 !important;
+}
+
+.albums,
+.photo {
+  &-header {
+    z-index: 10;
+  }
+  &-sidebar {
+    z-index: 11;
+  }
+}

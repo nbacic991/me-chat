@@ -1,0 +1,118 @@
+<div class="event-details-comp">
+  <div class="event-details-comp-wrapper">
+    <app-header></app-header>
+    <app-chat></app-chat>
+    <app-sidebar></app-sidebar>
+    <main>
+      <div class="top-main-details d-flex align-items-center">
+        <span class="page-item-link">Events</span>
+        <div class="breadcrumbs">
+          <img src="./assets/img/home/home.svg" alt="" class="breadcrumb-home">
+          <span class="breadcrumbs-separator">-</span>
+          <span class="breadcrumbs-link"><a routerLink="/events">EVENTS</a></span>
+          <span class="breadcrumbs-separator">-</span>
+          <span class="breadcrumbs-link">EVENTS / MILL WEEK</span>
+        </div>
+      </div>
+      <div class="main-inner">
+        <div class="container-fluid single-event">
+          <!--          <h3> Album {{eventId}}</h3>-->
+          <h1 class="single-event-title">Events / Mill Week</h1>
+          <h2 class="single-event-subtitle mt-4 mb-4">Material Spotlight</h2>
+          <div class="events-wrapper">
+            <div class="event-video" *ngFor="let video of eventVideos; let i = index;"
+                 [ngClass]="(i == 0) ? 'left-big-one' : 'right-small-one'">
+              <img src="./assets/img/events/{{video.image}}.jpg" class="img-fluid"/>
+            </div>
+          </div>
+          <div class="row event-details">
+            <div class="col-md-6">
+              <h3>Kingpin Show</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum.</p>
+            </div>
+            <div class="col-md-3 speakers">
+              <h3>Speakers</h3>
+              <div class="speakers-single d-flex">
+                <div>
+                  <img src="./assets/img/people/people_111.svg" alt="">
+                </div>
+                <div class="col-md-10">
+                  <p class="speaker-name">Ajit Mohan</p>
+                  <p class="speaker-position">Managing Director &VP, Faceb...</p>
+                </div>
+              </div>
+              <div class="speakers-single d-flex">
+                <div>
+                  <img src="./assets/img/people/people_111.svg" alt="">
+                </div>
+                <div class="col-md-10">
+                  <p class="speaker-name">Amanda Kidd</p>
+                  <p class="speaker-position">Founder & managing partner, I...</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <h3></h3>
+              <a href="#" class="discovery-button">DISCOVER MORE</a>
+            </div>
+          </div>
+          <div class="event-spotlight">
+            <h2 class="single-event-subtitle mt-4 mb-4">Supplier spotlight</h2>
+            <div class="row single-spotlight">
+              <div class="col-md-3 spotlight-details">
+                <p class="spotlight-title">Advance Denim</p>
+                <p class="material-num">10 materials</p>
+                <p class="material-description">Est. 1987, China, 6 m / mth WRAP, GOTS CERTIFIED</p>
+              </div>
+              <div class="col-md-3">
+                <img src="./assets/img/events/supplier_spotlight/advance.png" alt="">
+              </div>
+              <div class="col-md-3">
+                <img src="./assets/img/events/supplier_spotlight/dark_material.png" alt="">
+              </div>
+              <div class="col-md-3">
+                <img src="./assets/img/events/supplier_spotlight/light_material.png" alt="">
+              </div>
+            </div>
+            <div class="row single-spotlight">
+              <div class="col-md-3 spotlight-details">
+                <p class="spotlight-title">AGI Demin</p>
+                <p class="material-num">10 materials</p>
+                <p class="material-description">Est. 1949, Pakistan, 5.2 m / mth Gold LEED, GOTS CERTIFIED</p>
+              </div>
+              <div class="col-md-3">
+                <img src="./assets/img/events/supplier_spotlight/agi_denim.png" alt="">
+              </div>
+              <div class="col-md-3">
+                <img src="./assets/img/events/supplier_spotlight/dark_material.png" alt="">
+              </div>
+              <div class="col-md-3">
+                <img src="./assets/img/events/supplier_spotlight/light_material.png" alt="">
+              </div>
+            </div>
+            <div class="row single-spotlight">
+              <div class="col-md-3 spotlight-details">
+                <p class="spotlight-title">Rainbow Textiles, ING.</p>
+                <p class="material-num">10 materials</p>
+                <p class="material-description">Est. 1999, 3 m / mth, GOTS, BCI</p>
+              </div>
+              <div class="col-md-3">
+                <img src="./assets/img/events/supplier_spotlight/rainbow_textiles.png" alt="">
+              </div>
+              <div class="col-md-3">
+                <img src="./assets/img/events/supplier_spotlight/dark_material.png" alt="">
+              </div>
+              <div class="col-md-3">
+                <img src="./assets/img/events/supplier_spotlight/light_material.png" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

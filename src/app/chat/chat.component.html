@@ -1,0 +1,262 @@
+<div class="chat-comp">
+  <div class="chat-comp-wrapper col-md-3" [class.hide-chat]="status">
+    <!--Single Channel -->
+    <div class="single-chat-data" [class.shown]="singleData">
+      <div class="top-data">
+        <img (click)="showSingle(1)" class="back-arrow" src="./assets/img/chat/back-arrow.svg" alt="back arrow">
+        <div class="data-info">
+          <div class="left-side">
+            <img src="./assets/img/chat/channel.svg" class="channel-img" alt="Channel Name">
+          </div>
+          <div class="right-side">
+            <p class="channel-name">Leather items</p>
+            <span class="channel-members">Members: 137</span>
+          </div>
+        </div>
+        <img src="./assets/img/chat/channel-people-icon.svg" class="users-list-arrow" alt="channel peoples"
+             (click)="channelUsers(1)">
+      </div>
+      <div class="single-chat-info">
+        <div class="chat-item not-me">
+          <img src="./assets/img/people/people_111-1.svg" alt="Users name">
+          <div class="users-message-content">
+            <p class="users-name">John Lopes</p>
+            <p class="users-message-date">10 min ago</p>
+            <p class="users-message">
+              Vestibulum quis ligula eu felis dignissim mollis ac sed elit. Maecenas ultrices dictum dapibus. Aenean
+              accumsan nibh mi, vitae sagittis est vulputate ac.
+            </p>
+          </div>
+        </div>
+        <div class="chat-item me">
+          <div class="users-message-content">
+            <p class="users-name">Ellen Smith</p>
+            <p class="users-message-date">50 min ago</p>
+            <p class="users-message">Vestibulum quis ligula eu felis dignissim.</p>
+          </div>
+          <img src="./assets/img/people/people_111.svg" alt="Users name">
+        </div>
+        <div class="chat-item not-me">
+          <img src="./assets/img/people/people_111-1.svg" alt="Users name">
+          <div class="users-message-content">
+            <p class="users-name">Peter Johnson</p>
+            <p class="users-message-date">47 min ago</p>
+            <p class="users-message">Vestibulum quis ligula eu felis dignissim.</p>
+          </div>
+        </div>
+        <div class="chat-item not-me">
+          <img src="./assets/img/people/people_111-1.svg" alt="Users name">
+          <div class="users-message-content">
+            <p class="users-name">John Lopes</p>
+            <p class="users-message-date">10 min ago</p>
+            <p class="users-message">
+              Vestibulum quis ligula eu felis dignissim mollis ac sed elit. Maecenas ultrices dictum dapibus. Aenean
+              accumsan nibh mi, vitae sagittis est vulputate ac.
+            </p>
+          </div>
+        </div>
+        <div class="chat-item not-me">
+          <img src="./assets/img/people/people_111-1.svg" alt="Users name">
+          <div class="users-message-content">
+            <p class="users-name">Linda Lee</p>
+            <p class="users-message-date">12 min ago</p>
+            <p class="users-message">Vestibulum quis ligula eu felis dignissim mollis ac sed elit. Maecenas
+              ultrices.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Single Channel Users -->
+    <div class="channel-users-list" [class.shown]="showChannelUsers">
+      <div class="top-data">
+        <img (click)="channelUsers(1)" class="back-arrow" src="./assets/img/chat/back-arrow.svg" alt="back arrow">
+        <div class="data-info">
+          <div class="left-side">
+            <img src="./assets/img/chat/channel.svg" class="channel-img" alt="Channel Name">
+          </div>
+          <div class="right-side">
+            <p class="channel-name">Users list</p>
+          </div>
+        </div>
+      </div>
+      <div class="single-chat-info">
+        <div class="search-filed-wrapper">
+          <input type="text" class="search-text" placeholder="Search for..">
+          <button><img src="./assets/img/chat/search.svg" alt="search icon"></button>
+        </div>
+        <div class="peoples-list">
+          <ul>
+            <li *ngFor="let dms of dms" (click)="showSingleChatInfo(32131)">
+              <div class="peoples-item d-flex align-content-start">
+                <div class="left-side">
+                  <img src="./assets/img/chat/{{ dms.picture }}.svg" alt="">
+                </div>
+                <div class="right-side col-md-10">
+                  <div class="top-part d-flex align-items-center justify-content-between">
+                    <span class="peoples-name">{{ dms.name }}</span>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--Single Chat - DM - Info-->
+    <div class="single-user-information" [class.shown]="singleChatInfo">
+      <div class="top-data">
+        <img (click)="showSingleChatInfo(32131)" class="back-arrow" src="./assets/img/chat/back-arrow.svg" alt="back arrow">
+        <div class="data-info">
+          <div class="left-side">
+            <img src="./assets/img/chat/letter_a.svg" class="channel-img" alt="Person Name">
+          </div>
+          <div class="right-side">
+            <p class="channel-name">Alma Peterson</p>
+          </div>
+        </div>
+<!--        <img src="./assets/img/chat/channel-people-icon.svg" class="users-list-arrow" alt="channel peoples"-->
+<!--             (click)="channelUsers(1)">-->
+      </div>
+      <div class="single-chat-info">
+        <div class="chat-item not-me">
+          <img src="./assets/img/chat/letter_a.svg" alt="Users name">
+          <div class="users-message-content">
+            <p class="users-name">Alma Peterson</p>
+            <p class="users-message-date">10 min ago</p>
+            <p class="users-message">
+              Vestibulum quis ligula eu felis dignissim mollis ac sed elit. Maecenas ultrices dictum dapibus. Aenean
+              accumsan nibh mi, vitae sagittis est vulputate ac.
+            </p>
+          </div>
+        </div>
+        <div class="chat-item me">
+          <div class="users-message-content">
+            <p class="users-name">Ellen Smith</p>
+            <p class="users-message-date">50 min ago</p>
+            <p class="users-message">Vestibulum quis ligula eu felis dignissim.</p>
+          </div>
+          <img src="./assets/img/people/people_111.svg" alt="Users name">
+        </div>
+      </div>
+      <div class="send-message">
+        <input type="text" name="message-text" placeholder="Start typing..."/>
+        <button><img src="./assets/img/chat/send.svg" alt=""></button>
+      </div>
+    </div>
+    <div (click)="hideChat()" class="chat-toggler">
+      <img src="./assets/img/chat/close-chat.svg" alt="">
+    </div>
+    <ul class="nav nav-tabs chat-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="feed-tab" data-toggle="tab" href="#feed" role="tab" aria-controls="feed"
+           aria-selected="true">Feed</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="channels-tab" data-toggle="tab" href="#channels" role="tab" aria-controls="channels"
+           aria-selected="false">Channels</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="peoples-tab" data-toggle="tab" href="#peoples" role="tab" aria-controls="peoples"
+           aria-selected="false">DM</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="feed" role="tabpanel" aria-labelledby="feed-tab">
+        <div class="chat-inner">
+          <div class="chat-wrapper-list">
+            <div class="peoples-list">
+              <ul>
+                <li *ngFor="let people of peoples">
+                  <div class="peoples-item d-flex align-content-start">
+                    <div class="left-side">
+                      <img src="./assets/img/people/{{ people.picture }}.svg" alt="">
+                    </div>
+                    <div class="right-side col-md-10">
+                      <div class="top-part d-flex align-items-center justify-content-between">
+                        <span class="peoples-name">{{ people.name }}</span>
+                      </div>
+                      <div class="bottom-part">
+                        <span class="peoples-message">{{ people.message }}</span>
+                        <span class="peoples-date">{{ people.date }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="channels" role="tabpanel" aria-labelledby="channels-tab">
+        <div class="chat-inner">
+          <div class="search-filed-wrapper">
+            <input type="text" class="search-text" placeholder="Search for..">
+            <button><img src="./assets/img/chat/search.svg" alt="search icon"></button>
+          </div>
+          <div class="chat-wrapper-list channels">
+            <div class="peoples-list">
+              <ul>
+                <li *ngFor="let channel of channels" (click)="showSingle(1)">
+                  <div class="peoples-item d-flex align-content-start">
+                    <div class="left-side">
+                      <img src="./assets/img/chat/{{ channel.picture }}.svg" alt="channel-img">
+                      <img [class.lockedin]="channel.locked != true" class="locked-channel-icon"
+                           src="./assets/img/chat/channel-lock.svg" alt="locked-channel">
+                    </div>
+                    <div class="right-side col-md-10">
+                      <div class="top-part d-flex align-items-center justify-content-between">
+                        <span class="peoples-name">{{ channel.name }}</span>
+
+                      </div>
+                      <div class="bottom-part">
+                        <span class="peoples-date">Members: {{ channel.members }}</span>
+                      </div>
+                      <span class="peoples-messages" [class.no-messages]="channel.messages == '0'">
+                        <span>{{ channel.messages }}</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="peoples" role="tabpanel" aria-labelledby="peoples-tab">
+        <div class="chat-inner">
+          <div class="chat-wrapper-list dms">
+            <div class="peoples-list">
+              <ul>
+                <li *ngFor="let dms of dms" (click)="showSingleChatInfo(32131)">
+                  <div class="peoples-item d-flex align-content-start">
+                    <div class="left-side" [class.is-online]="dms.is_online">
+                      <div class="img-wrapper">
+                        <img src="./assets/img/chat/{{ dms.picture }}.svg" alt="channel-img">
+                      </div>
+                    </div>
+                    <div class="right-side col-md-10">
+                      <div class="top-part d-flex align-items-center justify-content-between">
+                        <span class="peoples-name">{{ dms.name }}</span>
+
+                      </div>
+                      <div class="bottom-part">
+                        <span class="peoples-date">Members: {{ dms.message_text }}</span>
+                      </div>
+                      <span class="peoples-messages" [class.messages-num]="dms.messages != 0">
+                        <span>{{ dms.messages }}</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <!--           <div class="send-message">-->
+            <!--             <input type="text" name="message-text" placeholder="Start typing..." />-->
+            <!--             <button><img src="./assets/img/chat/send.svg" alt=""></button>-->
+            <!--           </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

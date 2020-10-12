@@ -1,0 +1,43 @@
+.events-comp {
+  .events-sidebar {
+    width: 70px;
+    background-color: #fff;
+    height: 100vh;
+    padding: 10px;
+    box-shadow: 10px 0px 20px rgba(102, 102, 102, 0.05);
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  .events-header {
+    position: fixed;
+    top: 0;
+    padding: 10px;
+    height: 70px;
+    width: 100%;
+    background-color: #fff;
+    img {
+      margin: 0 15px;
+    }
+  }
+  main {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #E5E5E5;
+    padding: 90px 0 0 90px;
+    .card {
+      margin-bottom: 3%;
+      transition: .5s ease-in-out;
+      &:hover {
+        background-color: #007bff;
+        a {
+          color: white;
+          &:hover {
+            color: white;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+}
