@@ -22,6 +22,8 @@
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "bootstrap": "^4.5.2",
     "jquery": "^3.5.1",
+    "ngx-cookie-service": "^10.1.1",
+    "rocket.chat.realtime.api.rxjs": "^2.1.1",
     "rxjs": "~6.6.0",
     "rxjs-compat": "^6.6.3",
     "tslib": "^2.0.0",

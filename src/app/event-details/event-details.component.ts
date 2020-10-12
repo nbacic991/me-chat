@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {EventsService} from "../services/events.service";
-import {ActivatedRoute} from "@angular/router";
+import { EventsService } from '../services/events.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-event-details',
@@ -13,22 +13,22 @@ export class EventDetailsComponent implements OnInit {
 
   eventVideos = [
     {
-      'title': 'Video 1',
-      'image' : 'video_1'
+      title: 'Video 1',
+      image: 'video_1'
     },
     {
-      'title': 'Video 2',
-      'image' : 'video_2'
+      title: 'Video 2',
+      image: 'video_2'
     },
     {
-      'title': 'Video 3',
-      'image' : 'video_3'
+      title: 'Video 3',
+      image: 'video_3'
     },
     {
-      'title': 'Video 4',
-      'image' : 'video_4'
+      title: 'Video 4',
+      image: 'video_4'
     }
-  ]
+  ];
 
   constructor(
     private eventsService: EventsService,
@@ -37,7 +37,9 @@ export class EventDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.eventId = this.route.snapshot.params.albumId;
-    this.eventDetails = this.eventsService.getEventData(this.eventId);
+    // this.eventDetails = this.eventsService.getEventData(this.eventId);
+    this.eventDetails = this.eventsService.loginAndGetToken('nemanja91.bacic', 'Skidalica991.');
+    console.log('Initiated');
   }
 
 }
