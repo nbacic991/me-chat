@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { EventsService } from '../services/events.service';
 import { HttpClient } from '@angular/common/http';
-import { RealTimeAPI } from 'rocket.chat.realtime.api.rxjs';
+import { RealTimeAPI } from 'rocket.chat.realtime.api.rxjs'; // https://www.npmjs.com/package/rocket.chat.realtime.api.rxjs
 
 const realTimeAPI = new RealTimeAPI('wss://chat.material-exchange.com/websocket');
 realTimeAPI.keepAlive().subscribe();
 const auth = realTimeAPI.login('nemanja91.bacic', 'Skidalica991.');
+auth.subscribe(
+  (data) => console.log('Data: ', data),
+  (err) => console.log(err),
+  () => console.log('completed'));
 
 @Component({
   selector: 'app-events',
@@ -32,11 +36,7 @@ export class EventsComponent implements OnInit {
     this.subscription = await this.eventsService.getSubscription(); // https://docs.rocket.chat/api/rest-api/methods/subscriptions/get
     console.log('Subscription: ', this.subscription);
 
-    auth.subscribe(
-      (data) => console.log('Data: ', data),
-      (err) => console.log(err),
-      () => console.log('completed'));
-
+    realTimeAPI.callMethod('rooms/get', [{ $date: 0 }]);
 
   }
 
