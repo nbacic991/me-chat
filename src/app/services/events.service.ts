@@ -43,12 +43,14 @@ export class EventsService {
     private cookieService: CookieService
   ) { }
 
-  // getEvents() {
-  //   return this.http.get('https://jsonplaceholder.typicode.com/albums');
-  // }
-  // getEventData(albumId) {
-  //   return this.http.get(`https://jsonplaceholder.typicode.com/photos?albumId=${albumId}`);
-  // }
+  async getEvents(): Promise<any> {
+    const response = this.http.get('https://jsonplaceholder.typicode.com/albums');
+    return response;
+  }
+  async getEventData(albumId): Promise<any> {
+    const response = this.http.get(`https://jsonplaceholder.typicode.com/photos?albumId=${albumId}`);
+    return response;
+  }
 
   async loginAndGetToken(user: string, password: string): Promise<any> {
     try {

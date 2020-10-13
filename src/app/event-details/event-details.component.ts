@@ -37,9 +37,7 @@ export class EventDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.eventId = this.route.snapshot.params.albumId;
-    // this.eventDetails = this.eventsService.getEventData(this.eventId);
-    this.eventDetails = this.eventsService.loginAndGetToken('nemanja91.bacic', 'Skidalica991.');
-    console.log('Initiated');
+    this.eventDetails = this.eventsService.getEventData(this.eventId);
   }
 
 }
