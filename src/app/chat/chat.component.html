@@ -3,7 +3,8 @@
     <!--Single Channel -->
     <div class="single-chat-data" [class.shown]="singleData">
       <div class="top-data">
-        <img (click)="showSingle(1)" class="back-arrow" src="./assets/img/chat/back-arrow.svg" alt="back arrow">
+        <img (click)="showSingle('RkhvwmyLgyghT8nHy')" class="back-arrow" src="./assets/img/chat/back-arrow.svg"
+             alt="back arrow">
         <div class="data-info">
           <div class="left-side">
             <img src="./assets/img/chat/channel.svg" class="channel-img" alt="Channel Name">
@@ -14,54 +15,14 @@
           </div>
         </div>
         <img src="./assets/img/chat/channel-people-icon.svg" class="users-list-arrow" alt="channel peoples"
-             (click)="channelUsers(1)">
+             (click)="channelUsers('RkhvwmyLgyghT8nHy')">
       </div>
       <div class="single-chat-info">
-        <div class="chat-item not-me">
-          <img src="./assets/img/people/people_111-1.svg" alt="Users name">
+        <div class="chat-item" *ngFor="let message of channelInfo" [class.me]="message.u._id == 'BrpLPfjeWHL9Mm5Di'">
           <div class="users-message-content">
-            <p class="users-name">John Lopes</p>
-            <p class="users-message-date">10 min ago</p>
-            <p class="users-message">
-              Vestibulum quis ligula eu felis dignissim mollis ac sed elit. Maecenas ultrices dictum dapibus. Aenean
-              accumsan nibh mi, vitae sagittis est vulputate ac.
-            </p>
-          </div>
-        </div>
-        <div class="chat-item me">
-          <div class="users-message-content">
-            <p class="users-name">Ellen Smith</p>
-            <p class="users-message-date">50 min ago</p>
-            <p class="users-message">Vestibulum quis ligula eu felis dignissim.</p>
-          </div>
-          <img src="./assets/img/people/people_111.svg" alt="Users name">
-        </div>
-        <div class="chat-item not-me">
-          <img src="./assets/img/people/people_111-1.svg" alt="Users name">
-          <div class="users-message-content">
-            <p class="users-name">Peter Johnson</p>
-            <p class="users-message-date">47 min ago</p>
-            <p class="users-message">Vestibulum quis ligula eu felis dignissim.</p>
-          </div>
-        </div>
-        <div class="chat-item not-me">
-          <img src="./assets/img/people/people_111-1.svg" alt="Users name">
-          <div class="users-message-content">
-            <p class="users-name">John Lopes</p>
-            <p class="users-message-date">10 min ago</p>
-            <p class="users-message">
-              Vestibulum quis ligula eu felis dignissim mollis ac sed elit. Maecenas ultrices dictum dapibus. Aenean
-              accumsan nibh mi, vitae sagittis est vulputate ac.
-            </p>
-          </div>
-        </div>
-        <div class="chat-item not-me">
-          <img src="./assets/img/people/people_111-1.svg" alt="Users name">
-          <div class="users-message-content">
-            <p class="users-name">Linda Lee</p>
-            <p class="users-message-date">12 min ago</p>
-            <p class="users-message">Vestibulum quis ligula eu felis dignissim mollis ac sed elit. Maecenas
-              ultrices.</p>
+            <p class="users-name exists" *ngIf="message.name.user.name != ''">{{message.name.user.name}}</p>
+            <p class="users-message-date">{{message._updatedAt | amTimeAgo}}</p>
+            <p class="users-message">{{message.msg}}</p>
           </div>
         </div>
       </div>
@@ -81,19 +42,23 @@
       </div>
       <div class="single-chat-info">
         <div class="search-filed-wrapper">
-          <input type="text" class="search-text" placeholder="Search for..">
+          <input type="text" class="search-text"
+                 [(ngModel)]="searchText"
+                 placeholder="Search for..">
           <button><img src="./assets/img/chat/search.svg" alt="search icon"></button>
         </div>
         <div class="peoples-list">
           <ul>
-            <li *ngFor="let dms of dms" (click)="showSingleChatInfo(32131)">
+            <li *ngFor="let user of channelMembers | filter:searchText" (click)="showSingleChatInfo(user._id)">
               <div class="peoples-item d-flex align-content-start">
                 <div class="left-side">
-                  <img src="./assets/img/chat/{{ dms.picture }}.svg" alt="">
+                  <!--                  {{ getSingleUserAvatar(user._id) }}-->
+                  <img src="./assets/img/chat/letter_a.svg" alt="">
+                  <!--                  <img src="{{user.name.user.name}}" alt="">-->
                 </div>
                 <div class="right-side col-md-10">
                   <div class="top-part d-flex align-items-center justify-content-between">
-                    <span class="peoples-name">{{ dms.name }}</span>
+                    <span class="peoples-name">{{ user.name }}</span>
                   </div>
                 </div>
               </div>
@@ -105,7 +70,8 @@
     <!--Single Chat - DM - Info-->
     <div class="single-user-information" [class.shown]="singleChatInfo">
       <div class="top-data">
-        <img (click)="showSingleChatInfo(32131)" class="back-arrow" src="./assets/img/chat/back-arrow.svg" alt="back arrow">
+        <img (click)="showSingleChatInfo(32131)" class="back-arrow" src="./assets/img/chat/back-arrow.svg"
+             alt="back arrow">
         <div class="data-info">
           <div class="left-side">
             <img src="./assets/img/chat/letter_a.svg" class="channel-img" alt="Person Name">
@@ -114,8 +80,8 @@
             <p class="channel-name">Alma Peterson</p>
           </div>
         </div>
-<!--        <img src="./assets/img/chat/channel-people-icon.svg" class="users-list-arrow" alt="channel peoples"-->
-<!--             (click)="channelUsers(1)">-->
+        <!--        <img src="./assets/img/chat/channel-people-icon.svg" class="users-list-arrow" alt="channel peoples"-->
+        <!--             (click)="channelUsers(1)">-->
       </div>
       <div class="single-chat-info">
         <div class="chat-item not-me">
@@ -196,23 +162,25 @@
           <div class="chat-wrapper-list channels">
             <div class="peoples-list">
               <ul>
-                <li *ngFor="let channel of channels" (click)="showSingle(1)">
+                <li *ngFor="let channel of channels" (click)="showSingle(channel._id)">
                   <div class="peoples-item d-flex align-content-start">
                     <div class="left-side">
-                      <img src="./assets/img/chat/{{ channel.picture }}.svg" alt="channel-img">
-                      <img [class.lockedin]="channel.locked != true" class="locked-channel-icon"
+                      <img src="./assets/img/chat/channel.svg" alt="channel-img">
+                      <img class="locked-channel-icon"
                            src="./assets/img/chat/channel-lock.svg" alt="locked-channel">
+                      <!--                      <img [class.lockedin]="channel.locked != true" class="locked-channel-icon"-->
+                      <!--                           src="./assets/img/chat/channel-lock.svg" alt="locked-channel">-->
                     </div>
                     <div class="right-side col-md-10">
                       <div class="top-part d-flex align-items-center justify-content-between">
-                        <span class="peoples-name">{{ channel.name }}</span>
+                        <span class="peoples-name">{{ channel.fname }}</span>
 
                       </div>
                       <div class="bottom-part">
-                        <span class="peoples-date">Members: {{ channel.members }}</span>
+                        <span class="peoples-date">Members: {{ channel.usersCount }}</span>
                       </div>
-                      <span class="peoples-messages" [class.no-messages]="channel.messages == '0'">
-                        <span>{{ channel.messages }}</span>
+                      <span class="peoples-messages" [class.no-messages]="!channel.lastMessage">
+                        <span>{{ channel.msgs }}</span>
                       </span>
                     </div>
                   </div>

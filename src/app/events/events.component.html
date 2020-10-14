@@ -4,18 +4,59 @@
     <app-chat></app-chat>
     <app-sidebar></app-sidebar>
     <main>
-      <h1>Events</h1>
-<!--      <div class="container-fluid">-->
-<!--        <div class="row">-->
-<!--          <div class="col-md-4" *ngFor="let event of events | async">-->
-<!--            <div class="card">-->
-<!--              <div class="card-body">-->
-<!--                <a routerLink="/events/{{event.id}}">{{event.title}}</a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
+      <div class="top-main-details d-flex align-items-center">
+        <span class="page-item-link">Events</span>
+        <div class="breadcrumbs">
+          <img src="./assets/img/home/home.svg" alt="" class="breadcrumb-home">
+          <span class="breadcrumbs-separator">-</span>
+          <span class="breadcrumbs-link"><a routerLink="/events">EVENTS</a></span>
+        </div>
+      </div>
+      <div class="main-inner">
+        <h1>Upcoming Events</h1>
+        <div *ngFor="let item of events[0].data; let num = index;" class="single-event">
+          <div class="event-item">0{{num+1}}</div>
+          <div class="event-header-items row">
+            <div class="date col-md-3">
+              <span class="start-date">{{item.attributes[1].value | amDateFormat:'MMMM D' }}</span>
+              -
+              <span class="end-date">{{item.attributes[2].value | amDateFormat:'MMMM D, YYYY' }}</span>
+            </div>
+            <div class="program col-md-3">
+              <span>Program</span>
+            </div>
+          </div>
+          <div class="event-body-items row">
+            <div class="information col-md-3">
+              <div class="event-name">{{item.name}}</div>
+              <div class="event-description">{{item.attributes[0].description ? item.attributes[0].description : 'Welcome to the most exclusive Digital Fashion Event of the year!'}}</div>
+              <a target="_blank" href="{{item.attributes[3].value ? '//'+item.attributes[3].value : '#' }}"
+                 class="event-register-button">Register now</a>
+            </div>
+            <div class="program col-md-3">
+              <div class="single-program">
+                <p class="program-date">October 22nd 2020</p>
+                <p class="program-name">NEXT TEXTILE Opening Conference</p>
+              </div>
+              <div class="single-program">
+                <p class="program-date">October 22nd - November 6th 2020</p>
+                <p class="program-name">Sourcing & Inspiration Material Showcase</p>
+              </div>
+              <div class="single-program">
+                <p class="program-date">November 2nd - November 6th 2020</p>
+                <p class="program-name">Digital Fashion Week</p>
+              </div>
+            </div>
+            <div class="event-image col-md-3">
+              <div class="event-image-overlay">
+                <img src="{{num == 0 ? './assets/img/events/kingpins-logo.png' : './assets/img/events/ntds.png'}}" alt="">
+              </div>
+              <a href="/events/1" class="view-more">View more <img src="./assets/img/events/arrow-right.svg" alt="arrow-right"></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </main>
   </div>
 </div>

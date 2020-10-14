@@ -24,7 +24,7 @@
     width: 100%;
     min-height: 100vh;
     background-color: #E5E5E5;
-    padding: 90px 0 0 90px;
+    padding: 70px 0 0 70px;
     .card {
       margin-bottom: 3%;
       transition: .5s ease-in-out;
@@ -35,6 +35,108 @@
           &:hover {
             color: white;
             text-decoration: none;
+          }
+        }
+      }
+    }
+    .main-inner {
+      padding: 90px 150px 15px 150px;
+      h1 {
+        color: #282A3C;
+        font-size: 36px;
+        line-height: 40px;
+        font-weight: bold;
+        margin-bottom: 50px;
+      }
+      .single-event {
+        position: relative;
+        padding-top: 80px;
+        padding-left: 60px;
+        margin-bottom: 100px;
+        .event {
+          &-header-items {
+            border-bottom: 1px solid #74778C;
+            span {
+              color: #63738B;
+              font-size: 18px;
+              font-weight: 700;
+              line-height: 25px;
+            }
+          }
+          &-body-items {
+            margin-top: 20px;
+            .event-name {
+              color: #282A3C;
+              font-size: 24px;
+              line-height: 33px;
+              font-weight: bold;
+              text-transform: uppercase;
+            }
+            .event-description {
+              font-size: 14px;
+              line-height: 19px;
+              color: #63738B;
+              padding: 15px 15px 15px 0;
+            }
+            .event-register-button {
+              background: #7ED321;
+              border-radius: 4px;
+              color: #fff;
+              padding: 10px 30px;
+              text-transform: uppercase;
+              display: inline-block;
+              margin-top: 15px;
+              font-weight: bold;
+              font-size: 12px;
+              line-height: 16px;
+            }
+            .event-image {
+              display: flex;
+              flex-direction: column;
+              .event-image-overlay {
+                background-color: #fff;
+                border-radius: 8px;
+                img {
+                  display: block;
+                  padding: 15px;
+                  width: 100%;
+                  max-width: 70%;
+                  margin: auto;
+                }
+              }
+              a {
+                display: inline-block;
+                margin-top: 10px;
+                margin-left: auto;
+                color: #5849E0;
+                text-align: right;
+                font-size: 14px;
+                line-height: 19px;
+              }
+            }
+            .program {
+              p {
+                font-size: 14px;
+                line-height: 19px;
+              }
+              &-date {
+                color: #282A3C;
+                font-weight: bold;
+                margin-bottom: 1px;
+              }
+              &-name {
+                color: #63738B;
+              }
+            }
+          }
+          &-item {
+            position: absolute;
+            font-size: 288px;
+            color: rgba(40, 42, 60, 0.05);
+            top: -50px;
+            left: -50px;
+            line-height: 1em;
+            font-weight: bold;
           }
         }
       }

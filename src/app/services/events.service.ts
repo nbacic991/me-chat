@@ -43,15 +43,24 @@ export class EventsService {
     private cookieService: CookieService
   ) { }
 
-  async getEvents(): Promise<any> {
-    const response = this.http.get('https://jsonplaceholder.typicode.com/albums');
-    return response;
-  }
-  async getEventData(albumId): Promise<any> {
-    const response = this.http.get(`https://jsonplaceholder.typicode.com/photos?albumId=${albumId}`);
-    return response;
-  }
+  async getAllEvents(eventType: string): Promise<any> {
+    try {
+      const response = await fetch('https://dev-library-master.material-exchange.com:8443/Windchill/servlet/rest/meapi/company/getActiveShows', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+        },
+        body: JSON.stringify({
+          eventType
+        })
+      });
+      const resToJson = await response.json();
+      return resToJson;
+    } catch {
 
+    }
+  }
   async loginAndGetToken(user: string, password: string): Promise<any> {
     try {
       const response = await fetch('https://chat.material-exchange.com/api/v1/login', {
@@ -76,6 +85,9 @@ export class EventsService {
     }
   }
 
+  /**
+   * Channels
+   */
   async getListOfChannels(): Promise<any> {
     const token: string = this.cookieService.get('chatToken');
     const userId: string = this.cookieService.get('userId');
@@ -89,7 +101,55 @@ export class EventsService {
           'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
         }
       });
+      const firstResp = await response.json();
+      const resToJson = firstResp.channels;
+      return resToJson;
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
+  async getSingleChannel(channelId): Promise<any> {
+    const token: string = this.cookieService.get('chatToken');
+    const userId: string = this.cookieService.get('userId');
+    try {
+      const response = await fetch(`https://chat.material-exchange.com/api/v1/channels.messages?roomId=${channelId}&count=100`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
+          'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
+        },
+        // body: JSON.stringify({
+        //   offset: 10,
+        //   count: 5
+        // })
+      });
       const resToJson = await response.json();
+      // console.log(resToJson.messages);
+      const retData = resToJson.messages;
+      return retData;
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
+  async getSingleChannelUsers(channelId): Promise<any> {
+    const token: string = this.cookieService.get('chatToken');
+    const userId: string = this.cookieService.get('userId');
+    try {
+      const response = await fetch(`https://chat.material-exchange.com/api/v1/channels.members?roomId=${channelId}&count=200`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
+          'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
+        }
+      });
+      const firstResp = await response.json();
+      const resToJson = firstResp.members;
       return resToJson;
     }
     catch (error) {
@@ -97,6 +157,57 @@ export class EventsService {
     }
   }
 
+  /**
+   * Users
+   */
+  async getUserAvatar(userID): Promise<any> {
+    const token: string = this.cookieService.get('chatToken');
+    const userId: string = this.cookieService.get('userId');
+    try {
+      const response = await fetch(`https://chat.material-exchange.com/api/v1/users.getAvatar?username=${userID}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'image/png',
+          'Access-Control-Allow-Origin': '*',
+          'Content-Encoding': 'gzip',
+          'Transfer-Encoding': 'chunked',
+          'X-Frame-Options': 'sameorigin',
+          Accept: '*/*',
+          'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
+          'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
+        }
+      });
+
+      const firstResp = await response.blob();
+      // console.log(firstResp);
+      return firstResp;
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
+  async getUserInfo(userID): Promise<any> {
+    const token: string = this.cookieService.get('chatToken');
+    const userId: string = this.cookieService.get('userId');
+    try {
+      const response = await fetch(`https://chat.material-exchange.com/api/v1/users.info?userId=${userID}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
+          'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
+        },
+      });
+
+      const firstResp = await response.json();
+      // console.log(firstResp);
+      return firstResp;
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
   async getSubscription(): Promise<any> {
     try {
       const response = await fetch('https://chat.material-exchange.com/api/v1/subscriptions.get', {

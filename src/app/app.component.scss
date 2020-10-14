@@ -19,13 +19,42 @@ input::placeholder {
 input:focus {
   outline: 0 !important;
 }
-
-.albums,
-.photo {
-  &-header {
-    z-index: 10;
+a:hover {
+  text-decoration: none;
+}
+.top-main-details {
+  height: 55px;
+  background-color: #fff;
+  border-top: 1px solid #B2B0C3;
+  padding: 15px;
+  position: fixed;
+  left: 70px;
+  width: 100%;
+  z-index: 2;
+  .page-item-link {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 0.2px;
+    color: #434349;
+    padding-right: 100px;
+    font-family: 'Open Sans', sans-serif;
   }
-  &-sidebar {
-    z-index: 11;
+  .breadcrumbs {
+    span {
+      color: #B2B0C3;
+      font-size: 12px;
+      line-height: 14px;
+    }
+    &-separator {
+      margin: 0 5px;
+    }
+    &-link {
+      a {
+        color: inherit;
+        font-weight: 700;
+        text-decoration: none;
+      }
+    }
   }
 }
