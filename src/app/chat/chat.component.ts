@@ -188,11 +188,17 @@ export class ChatComponent implements OnInit {
   loginCredentials: any;
   subscription: any;
   channelInfo: any;
+  channelData: any;
   channelMembers: any;
+  currentChannel: string;
+  currentChannelId: string;
+  currentChannelMembers: string;
   searchText = '';
   singleChatMessages: any;
   singleMessage: any;
   messageText: string;
+  currentUserName: string;
+  currentUser: string;
 
 
   constructor(
@@ -210,24 +216,34 @@ export class ChatComponent implements OnInit {
    */
   async showSingle(channelId): Promise<void> {
     this.singleData = !this.singleData;
+    this.channelData = await this.eventsService.getSingleChannelInfo(channelId);
+    this.currentChannel = this.channelData.channel.name;
+    this.currentChannelId = channelId;
+    this.currentChannelMembers = this.channelData.channel.usersCount;
+    console.log(this.channelData);
     this.channelInfo = await this.eventsService.getSingleChannel(channelId);
     const promises = this.channelInfo.map(async (item) => {
       const userName = await this.getUserInfo(item.u._id);
       item.name = userName;
     });
     await Promise.all(promises);
+
   }
   async channelUsers(channelId): Promise<void> {
     this.showChannelUsers = !this.showChannelUsers;
+    this.channelMembers = await this.eventsService.getSingleChannelUsers(channelId);
+  }
+  async getBackToChannel(channelId): Promise<void> {
+    this.singleChatInfo = !this.singleChatInfo;
+    this.singleData = !this.singleData;
     this.channelMembers = await this.eventsService.getSingleChannelUsers(channelId);
   }
 
   /**
    * Users
    */
-  async showSingleChatInfo(userUsername): Promise<void> {
+  async showSingleChatInfo(userUsername, userID): Promise<void> {
     this.singleChatInfo = !this.singleChatInfo;
-    console.log('User username:', userUsername);
     this.singleChatMessages = await this.eventsService.singleUserMessages(userUsername);
     const myToken = this.cookieService.get('userNewId');
     console.log(this.singleChatMessages);
@@ -238,6 +254,10 @@ export class ChatComponent implements OnInit {
       }
     });
     await Promise.all(promises);
+    const userInfo = await this.eventsService.getUserInfo(userID);
+    this.currentUserName = userInfo.user.name;
+    this.currentUser = userUsername;
+    console.log(userInfo);
   }
 
   async sendDirectUserMessage(userName, messageText): Promise<void> {
@@ -247,6 +267,7 @@ export class ChatComponent implements OnInit {
     this.singleMessage = await this.eventsService.sendDirectMessage(user, message);
     const messageData = this.singleMessage;
     if (messageData.success === true) {
+      this.messageText = '';
       this.singleChatMessages = await this.eventsService.singleUserMessages(userName);
       const promises = this.singleChatMessages.map((item) => {
         let token = item.u._id;
@@ -261,8 +282,9 @@ export class ChatComponent implements OnInit {
   async getUserInfo(userID): Promise<void> {
     return this.eventsService.getUserInfo(userID);
   }
-  async getSingleUserAvatar(userID): Promise<void> {
-    return this.eventsService.getUserAvatar(userID);
+  async getAllChannels(): Promise<void> {
+    this.singleData = !this.singleData;
+    this.channels = await this.eventsService.getListOfChannels();
   }
   async ngOnInit(): Promise<void> {
     // this.events = this.eventsService.getEvents();

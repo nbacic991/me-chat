@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 
 // Login response example
+
 const hcResponse = {
   status: 'success',
   data: {
@@ -37,7 +38,8 @@ const hcResponse = {
   providedIn: 'root'
 })
 export class EventsService {
-
+  token: string = this.cookieService.get('chatToken');
+  userId: string = this.cookieService.get('userId');
   constructor(
     private http: HttpClient,
     private cookieService: CookieService
@@ -93,16 +95,14 @@ export class EventsService {
    * Channels
    */
   async getListOfChannels(): Promise<any> {
-    const token: string = this.cookieService.get('chatToken');
-    const userId: string = this.cookieService.get('userId');
     try {
       const response = await fetch('https://chat.material-exchange.com/api/v1/channels.list', {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
           Accept: '*/*',
-          'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
-          'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
         }
       });
       const firstResp = await response.json();
@@ -114,16 +114,14 @@ export class EventsService {
     }
   }
   async getSingleChannel(channelId): Promise<any> {
-    const token: string = this.cookieService.get('chatToken');
-    const userId: string = this.cookieService.get('userId');
     try {
       const response = await fetch(`https://chat.material-exchange.com/api/v1/channels.messages?roomId=${channelId}&count=100`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
           Accept: '*/*',
-          'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
-          'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
         },
         // body: JSON.stringify({
         //   offset: 10,
@@ -139,17 +137,37 @@ export class EventsService {
       console.log(error.message);
     }
   }
+  async getSingleChannelInfo(channelId): Promise<any> {
+    try {
+      const response = await fetch(`https://chat.material-exchange.com/api/v1/channels.info?roomId=${channelId}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
+        },
+        // body: JSON.stringify({
+        //   offset: 10,
+        //   count: 5
+        // })
+      });
+      const resToJson = await response.json();
+      return resToJson;
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
   async getSingleChannelUsers(channelId): Promise<any> {
-    const token: string = this.cookieService.get('chatToken');
-    const userId: string = this.cookieService.get('userId');
     try {
       const response = await fetch(`https://chat.material-exchange.com/api/v1/channels.members?roomId=${channelId}&count=200`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
           Accept: '*/*',
-          'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
-          'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
         }
       });
       const firstResp = await response.json();
@@ -164,41 +182,15 @@ export class EventsService {
   /**
    * Users
    */
-  async getUserAvatar(userID): Promise<any> {
-    const token: string = this.cookieService.get('chatToken');
-    const userId: string = this.cookieService.get('userId');
-    try {
-      const response = await fetch(`https://chat.material-exchange.com/api/v1/users.getAvatar?userId=${userID}`, {
-        method: 'GET',
-        headers: {
-          'Content-type': 'image/png',
-          'Access-Control-Allow-Origin': '*',
-          Accept: '*/*',
-          'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
-          'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
-        },
-        mode: 'no-cors'
-      });
-
-      const firstResp = await response.blob();
-      // console.log(firstResp);
-      return firstResp;
-    }
-    catch (error) {
-      console.log(error.message);
-    }
-  }
   async getUserInfo(userID): Promise<any> {
-    const token: string = this.cookieService.get('chatToken');
-    const userId: string = this.cookieService.get('userId');
     try {
       const response = await fetch(`https://chat.material-exchange.com/api/v1/users.info?userId=${userID}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
           Accept: '*/*',
-          'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
-          'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
         },
       });
 
@@ -211,16 +203,14 @@ export class EventsService {
     }
   }
   async singleUserMessages(userUsername): Promise<any> {
-    const token: string = this.cookieService.get('chatToken');
-    const userId: string = this.cookieService.get('userId');
     try {
       const response = await fetch(`https://chat.material-exchange.com/api/v1/im.messages?username=${userUsername}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
           Accept: '*/*',
-          'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
-          'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
         },
       });
 
@@ -239,8 +229,8 @@ export class EventsService {
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
           Accept: '*/*',
-          'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
-          'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
         }
       });
       const resToJson = await response.json();
@@ -255,8 +245,7 @@ export class EventsService {
    * Send Message
    */
   async sendDirectMessage(userID: string, messageText: string): Promise<any> {
-    const token: string = this.cookieService.get('chatToken');
-    const userId: string = this.cookieService.get('userId');
+
     const data = {
       channel: userID,
       text: messageText
@@ -267,8 +256,8 @@ export class EventsService {
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
           Accept: '*/*',
-          'X-Auth-Token': token,  // instert token from cookie
-          'X-User-Id': userId, // instert userId from cookie
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
         },
         body: JSON.stringify(data)
       });
