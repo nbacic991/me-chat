@@ -17,10 +17,10 @@
         <img src="./assets/img/chat/channel-people-icon.svg" class="users-list-arrow" alt="channel peoples"
              (click)="channelUsers('RkhvwmyLgyghT8nHy')">
       </div>
-      <div class="single-chat-info">
+      <div class="single-chat-info" *ngIf="channelInfo" >
         <div class="chat-item" *ngFor="let message of channelInfo" [class.me]="message.u._id == 'BrpLPfjeWHL9Mm5Di'">
-          <div class="users-message-content">
-            <p class="users-name exists" *ngIf="message.name.user.name != ''">{{message.name.user.name}}</p>
+          <div class="users-message-content" *ngIf="message && message.name && message.name.user && message.name.user.name">
+            <p class="users-name exists">{{message.name.user.name}}</p>
             <p class="users-message-date">{{message._updatedAt | amTimeAgo}}</p>
             <p class="users-message">{{message.msg}}</p>
           </div>
@@ -49,12 +49,10 @@
         </div>
         <div class="peoples-list">
           <ul>
-            <li *ngFor="let user of channelMembers | filter:searchText" (click)="showSingleChatInfo(user._id)">
+            <li *ngFor="let user of channelMembers | filter:searchText" (click)="showSingleChatInfo(user.username)">
               <div class="peoples-item d-flex align-content-start">
                 <div class="left-side">
-                  <!--                  {{ getSingleUserAvatar(user._id) }}-->
-                  <img src="./assets/img/chat/letter_a.svg" alt="">
-                  <!--                  <img src="{{user.name.user.name}}" alt="">-->
+                  <img style="max-width: 40px; width: 100%; border-radius: 13px;" src="https://chat.material-exchange.com/avatar/{{user.username}}" alt="">
                 </div>
                 <div class="right-side col-md-10">
                   <div class="top-part d-flex align-items-center justify-content-between">
@@ -80,33 +78,20 @@
             <p class="channel-name">Alma Peterson</p>
           </div>
         </div>
-        <!--        <img src="./assets/img/chat/channel-people-icon.svg" class="users-list-arrow" alt="channel peoples"-->
-        <!--             (click)="channelUsers(1)">-->
       </div>
       <div class="single-chat-info">
-        <div class="chat-item not-me">
-          <img src="./assets/img/chat/letter_a.svg" alt="Users name">
+        <div class="chat-item" *ngFor="let singleMessage of singleChatMessages" [class.me]="singleMessage.itsMe == 'me'">
+          <img src="https://chat.material-exchange.com/avatar/{{singleMessage.u.username}}" alt="{{singleMessage.u.username}}">
           <div class="users-message-content">
-            <p class="users-name">Alma Peterson</p>
-            <p class="users-message-date">10 min ago</p>
-            <p class="users-message">
-              Vestibulum quis ligula eu felis dignissim mollis ac sed elit. Maecenas ultrices dictum dapibus. Aenean
-              accumsan nibh mi, vitae sagittis est vulputate ac.
-            </p>
+            <p class="users-name">{{ singleMessage.u.username }}</p>
+            <p class="users-message-date">{{ singleMessage._updatedAt | amTimeAgo}}</p>
+            <p class="users-message">{{ singleMessage.msg }}</p>
           </div>
-        </div>
-        <div class="chat-item me">
-          <div class="users-message-content">
-            <p class="users-name">Ellen Smith</p>
-            <p class="users-message-date">50 min ago</p>
-            <p class="users-message">Vestibulum quis ligula eu felis dignissim.</p>
-          </div>
-          <img src="./assets/img/people/people_111.svg" alt="Users name">
         </div>
       </div>
       <div class="send-message">
-        <input type="text" name="message-text" placeholder="Start typing..."/>
-        <button><img src="./assets/img/chat/send.svg" alt=""></button>
+        <input type="text" name="message-text" placeholder="Start typing..." [(ngModel)]="messageText"/>
+        <button (click)="sendDirectUserMessage('test1',messageText)"><img src="./assets/img/chat/send.svg" alt=""></button>
       </div>
     </div>
     <div (click)="hideChat()" class="chat-toggler">

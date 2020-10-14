@@ -2,8 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { EventsService } from '../services/events.service';
 import { HttpClient } from '@angular/common/http';
 import { RealTimeAPI } from 'rocket.chat.realtime.api.rxjs';
-import {strict} from "assert";
-import {stringify} from "querystring"; // https://www.npmjs.com/package/rocket.chat.realtime.api.rxjs
+import { CookieService } from "ngx-cookie-service"; // https://www.npmjs.com/package/rocket.chat.realtime.api.rxjs
 
 
 const realTimeAPI = new RealTimeAPI('wss://chat.material-exchange.com/websocket');
@@ -183,6 +182,7 @@ export class ChatComponent implements OnInit {
   singleData: boolean;
   showChannelUsers: boolean;
   singleChatInfo: boolean;
+  messagesLoaded: Promise<boolean>;
 
   channels: any;
   loginCredentials: any;
@@ -190,6 +190,16 @@ export class ChatComponent implements OnInit {
   channelInfo: any;
   channelMembers: any;
   searchText = '';
+  singleChatMessages: any;
+  singleMessage: any;
+  messageText: string;
+
+
+  constructor(
+    private eventsService: EventsService,
+    private cookieService: CookieService
+  ) {
+  }
 
   hideChat(): void {
     this.status = !this.status;
@@ -197,47 +207,57 @@ export class ChatComponent implements OnInit {
 
   /**
    * Channels
-   * @param channelId
    */
   async showSingle(channelId): Promise<void> {
     this.singleData = !this.singleData;
     this.channelInfo = await this.eventsService.getSingleChannel(channelId);
-    // console.log('Channel info:', this.channelInfo);
     const promises = this.channelInfo.map(async (item) => {
       const userName = await this.getUserInfo(item.u._id);
       item.name = userName;
-      console.log(item);
     });
     await Promise.all(promises);
   }
   async channelUsers(channelId): Promise<void> {
     this.showChannelUsers = !this.showChannelUsers;
-    // console.log('Channel ID:', channelId);
     this.channelMembers = await this.eventsService.getSingleChannelUsers(channelId);
-    // const promises = this.channelMembers.map(async (item) => {
-    //   const image = await this.getSingleUserAvatar(item.username);
-    //   item.image = image;
-    //   console.log(item);
-    // });
-    // await Promise.all(promises);
   }
 
   /**
    * Users
-   * @param userId
    */
-  showSingleChatInfo(userId): void {
+  async showSingleChatInfo(userUsername): Promise<void> {
     this.singleChatInfo = !this.singleChatInfo;
-    console.log('User ID:', userId);
-  }
-  constructor(
-    private eventsService: EventsService,
-  ) {
+    console.log('User username:', userUsername);
+    this.singleChatMessages = await this.eventsService.singleUserMessages(userUsername);
+    const myToken = this.cookieService.get('userNewId');
+    console.log(this.singleChatMessages);
+    const promises = this.singleChatMessages.map((item) => {
+      let token = item.u._id;
+      if (token === myToken) {
+        item.itsMe = 'me';
+      }
+    });
+    await Promise.all(promises);
   }
 
-  // ngOnInit():void {
-  //
-  // }
+  async sendDirectUserMessage(userName, messageText): Promise<void> {
+    const myToken = this.cookieService.get('userNewId');
+    const user = '@' + userName;
+    const message = messageText;
+    this.singleMessage = await this.eventsService.sendDirectMessage(user, message);
+    const messageData = this.singleMessage;
+    if (messageData.success === true) {
+      this.singleChatMessages = await this.eventsService.singleUserMessages(userName);
+      const promises = this.singleChatMessages.map((item) => {
+        let token = item.u._id;
+        if (token === myToken) {
+          item.itsMe = 'me';
+        }
+      });
+      await Promise.all(promises);
+    }
+  }
+
   async getUserInfo(userID): Promise<void> {
     return this.eventsService.getUserInfo(userID);
   }

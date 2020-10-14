@@ -63,20 +63,24 @@ export class EventsService {
   }
   async loginAndGetToken(user: string, password: string): Promise<any> {
     try {
+      // {"ldap":true,"username":"nemanja91.bacic","ldapPass":"Skidalica991.","ldapOptions":{}}
       const response = await fetch('https://chat.material-exchange.com/api/v1/login', {
         method: 'POST',
         headers: {
-          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          'Content-type': 'application/json',
           Accept: '*/*',
         },
         body: JSON.stringify({
-          user,
-          password
+          ldap: true,
+          username: user,
+          ldapPass: password,
+          ldapOptions: {}
         })
       });
       const resToJson = await response.json();
-      this.cookieService.set('chatToken', hcResponse.data.authToken); // set token in cookie
-      this.cookieService.set('userId', hcResponse.data.me._id); // set userId in cookie
+      this.cookieService.set('chatToken', resToJson.data.authToken); // set token in cookie
+      this.cookieService.set('userId', resToJson.data.me._id); // set userId in cookie
+      this.cookieService.set('userNewId', resToJson.data.userId); // set userId in cookie
       // return resToJson;
       return hcResponse;  // hard coded response, login returns error 403 "User has no password set"
     }
@@ -164,18 +168,16 @@ export class EventsService {
     const token: string = this.cookieService.get('chatToken');
     const userId: string = this.cookieService.get('userId');
     try {
-      const response = await fetch(`https://chat.material-exchange.com/api/v1/users.getAvatar?username=${userID}`, {
+      const response = await fetch(`https://chat.material-exchange.com/api/v1/users.getAvatar?userId=${userID}`, {
         method: 'GET',
         headers: {
           'Content-type': 'image/png',
           'Access-Control-Allow-Origin': '*',
-          'Content-Encoding': 'gzip',
-          'Transfer-Encoding': 'chunked',
-          'X-Frame-Options': 'sameorigin',
           Accept: '*/*',
           'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
           'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
-        }
+        },
+        mode: 'no-cors'
       });
 
       const firstResp = await response.blob();
@@ -208,6 +210,28 @@ export class EventsService {
       console.log(error.message);
     }
   }
+  async singleUserMessages(userUsername): Promise<any> {
+    const token: string = this.cookieService.get('chatToken');
+    const userId: string = this.cookieService.get('userId');
+    try {
+      const response = await fetch(`https://chat.material-exchange.com/api/v1/im.messages?username=${userUsername}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',  // instert token from cookie
+          'X-User-Id': 'DvBynZpPmGuoFuMxv', // instert userId from cookie
+        },
+      });
+
+      const firstResp = await response.json();
+      const finalResp = firstResp.messages;
+      return finalResp;
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
   async getSubscription(): Promise<any> {
     try {
       const response = await fetch('https://chat.material-exchange.com/api/v1/subscriptions.get', {
@@ -221,6 +245,36 @@ export class EventsService {
       });
       const resToJson = await response.json();
       return resToJson;
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  /**
+   * Send Message
+   */
+  async sendDirectMessage(userID: string, messageText: string): Promise<any> {
+    const token: string = this.cookieService.get('chatToken');
+    const userId: string = this.cookieService.get('userId');
+    const data = {
+      channel: userID,
+      text: messageText
+    };
+    try {
+      const response = await fetch(`https://chat.material-exchange.com/api/v1/chat.postMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': token,  // instert token from cookie
+          'X-User-Id': userId, // instert userId from cookie
+        },
+        body: JSON.stringify(data)
+      });
+
+      const firstResp = await response.json();
+      return firstResp;
     }
     catch (error) {
       console.log(error.message);

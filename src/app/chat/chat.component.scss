@@ -275,13 +275,12 @@
         margin-bottom: 20px;
         &.me {
           justify-content: flex-end;
+          img {
+            order: 2;
+          }
           .users-message-content {
             margin-right: 10px;
-          }
-        }
-        &.not-me {
-          .users-message-content {
-            margin-left: 10px;
+            margin-left: 0;
           }
         }
         img {
@@ -297,6 +296,7 @@
           flex-wrap: wrap;
           justify-content: space-between;
           flex-basis: 60%;
+          margin-left: 10px;
           .users-name,
           .users-message-date {
             margin-bottom: 3px;
