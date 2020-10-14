@@ -156,13 +156,15 @@
       <div class="tab-pane fade" id="channels" role="tabpanel" aria-labelledby="channels-tab">
         <div class="chat-inner">
           <div class="search-filed-wrapper">
-            <input type="text" class="search-text" placeholder="Search for..">
+            <input type="text" class="search-text"
+                   [(ngModel)]="searchText"
+                   placeholder="Search for..">
             <button><img src="./assets/img/chat/search.svg" alt="search icon"></button>
           </div>
           <div class="chat-wrapper-list channels">
             <div class="peoples-list">
               <ul>
-                <li *ngFor="let channel of channels" (click)="showSingle(channel._id)">
+                <li *ngFor="let channel of channels | filter:searchText" (click)="showSingle(channel._id)">
                   <div class="peoples-item d-flex align-content-start">
                     <div class="left-side">
                       <img src="./assets/img/chat/channel.svg" alt="channel-img">
