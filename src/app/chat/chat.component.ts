@@ -1,17 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EventsService } from '../services/events.service';
 import { HttpClient } from '@angular/common/http';
 import { RealTimeAPI } from 'rocket.chat.realtime.api.rxjs';
-import { CookieService } from "ngx-cookie-service"; // https://www.npmjs.com/package/rocket.chat.realtime.api.rxjs
+import { CookieService } from 'ngx-cookie-service'; // https://www.npmjs.com/package/rocket.chat.realtime.api.rxjs
 
 
 const realTimeAPI = new RealTimeAPI('wss://chat.material-exchange.com/websocket');
-realTimeAPI.keepAlive().subscribe();
-const auth = realTimeAPI.login('nemanja91.bacic', 'Skidalica991.');
-auth.subscribe(
-  (data) => console.log('Data: ', data),
-  (err) => console.log(err),
-  () => console.log('completed'));
 
 @Component({
   selector: 'app-chat',
@@ -199,6 +193,7 @@ export class ChatComponent implements OnInit {
   messageText: string;
   currentUserName: string;
   currentUser: string;
+  observable: any;
 
 
   constructor(
@@ -248,7 +243,7 @@ export class ChatComponent implements OnInit {
     const myToken = this.cookieService.get('userNewId');
     console.log(this.singleChatMessages);
     const promises = this.singleChatMessages.map((item) => {
-      let token = item.u._id;
+      const token = item.u._id;
       if (token === myToken) {
         item.itsMe = 'me';
       }
@@ -270,7 +265,7 @@ export class ChatComponent implements OnInit {
       this.messageText = '';
       this.singleChatMessages = await this.eventsService.singleUserMessages(userName);
       const promises = this.singleChatMessages.map((item) => {
-        let token = item.u._id;
+        const token = item.u._id;
         if (token === myToken) {
           item.itsMe = 'me';
         }
@@ -293,6 +288,18 @@ export class ChatComponent implements OnInit {
     this.subscription = await this.eventsService.getSubscription(); // https://docs.rocket.chat/api/rest-api/methods/subscriptions/get
     // this.getUserInfo = await this.eventsService.getUserAvatar('xzkARGsFmA6nvaZax');
     realTimeAPI.callMethod('rooms/get', [{ $date: 0 }]);
+
+    // Socket
+    realTimeAPI.connectToServer(); // handshake
+    realTimeAPI.keepAlive();  // sends ping-pong
+    realTimeAPI.subscribe();  // subscribing
+
+    this.observable = realTimeAPI.loginWithAuthToken(this.loginCredentials.data.authToken);  // login and create observable;
+
+    this.observable.subscribe(
+      (data) => console.log('Data: ', data),
+      (err) => console.log(err),
+      () => console.log('completed'));   // Finaly subscribing to observable
 
   }
 
