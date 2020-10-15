@@ -66,7 +66,7 @@ export class EventsService {
   async loginAndGetToken(user: string, password: string): Promise<any> {
     try {
       // {"ldap":true,"username":"nemanja91.bacic","ldapPass":"Skidalica991.","ldapOptions":{}}
-      const response = await fetch('https://chat.material-exchange.com/api/v1/login', {
+      const response = await fetch('https://chat10.material-exchange.com/api/v1/login', {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
@@ -84,7 +84,7 @@ export class EventsService {
       this.cookieService.set('userId', resToJson.data.me._id); // set userId in cookie
       this.cookieService.set('userNewId', resToJson.data.userId); // set userId in cookie
       // return resToJson;
-      return hcResponse;  // hard coded response, login returns error 403 "User has no password set"
+      return resToJson;  // hard coded response, login returns error 403 "User has no password set"
     }
     catch (error) {
       console.log(error.message);
@@ -96,7 +96,7 @@ export class EventsService {
    */
   async getListOfChannels(): Promise<any> {
     try {
-      const response = await fetch('https://chat.material-exchange.com/api/v1/channels.list', {
+      const response = await fetch('https://chat10.material-exchange.com/api/v1/channels.list', {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -113,9 +113,10 @@ export class EventsService {
       console.log(error.message);
     }
   }
+
   async getSingleChannel(channelId): Promise<any> {
     try {
-      const response = await fetch(`https://chat.material-exchange.com/api/v1/channels.messages?roomId=${channelId}&count=100`, {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/channels.messages?roomId=${channelId}&count=100`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -139,7 +140,7 @@ export class EventsService {
   }
   async getSingleChannelInfo(channelId): Promise<any> {
     try {
-      const response = await fetch(`https://chat.material-exchange.com/api/v1/channels.info?roomId=${channelId}`, {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/channels.info?roomId=${channelId}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -161,7 +162,7 @@ export class EventsService {
   }
   async getSingleChannelUsers(channelId): Promise<any> {
     try {
-      const response = await fetch(`https://chat.material-exchange.com/api/v1/channels.members?roomId=${channelId}&count=200`, {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/channels.members?roomId=${channelId}&count=200`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -182,9 +183,28 @@ export class EventsService {
   /**
    * Users
    */
+  async getListOfUsers(): Promise<any> {
+    try {
+      const response = await fetch('https://chat10.material-exchange.com/api/v1/users.list?count=200', {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
+        }
+      });
+      const firstResp = await response.json();
+      const resToJson = firstResp.users;
+      return resToJson;
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
   async getUserInfo(userID): Promise<any> {
     try {
-      const response = await fetch(`https://chat.material-exchange.com/api/v1/users.info?userId=${userID}`, {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/users.info?userId=${userID}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -204,7 +224,7 @@ export class EventsService {
   }
   async singleUserMessages(userUsername): Promise<any> {
     try {
-      const response = await fetch(`https://chat.material-exchange.com/api/v1/im.messages?username=${userUsername}`, {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/im.messages?username=${userUsername}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -224,7 +244,7 @@ export class EventsService {
   }
   async getSubscription(): Promise<any> {
     try {
-      const response = await fetch('https://chat.material-exchange.com/api/v1/subscriptions.get', {
+      const response = await fetch('https://chat10.material-exchange.com/api/v1/subscriptions.get', {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -251,7 +271,7 @@ export class EventsService {
       text: messageText
     };
     try {
-      const response = await fetch(`https://chat.material-exchange.com/api/v1/chat.postMessage`, {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/chat.postMessage`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',

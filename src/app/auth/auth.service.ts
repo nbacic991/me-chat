@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Router} from "@angular/router";
 import {CookieService} from 'ngx-cookie-service';
 
@@ -13,18 +13,17 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    // public authService: AuthService,
     private cookieService: CookieService,
     public router: Router
   ) {
   }
 
   async logMeIn(): Promise<object> {
-    const host = 'https://library-master.material-exchange.com:443';
+    const host = 'https://library-master.material-exchange.com:8443';
     const loginUrl = host + '/Windchill/servlet/rest/meapi/user/getUserData';
     const securityCheck = host + '/Windchill/rfa/jsp/login/j_security_check';
     const csrfUrl = host + '/Windchill/servlet/rest/security/csrf';
-    const eventsUrl = 'https://library-master.material-exchange.com:443/Windchill/servlet/rest/meapi/company/getActiveShows';
+    const eventsUrl = 'https://library-master.material-exchange.com:8443/Windchill/servlet/rest/meapi/company/getActiveShows';
 
     try {
       const response = this.http.get(loginUrl,
@@ -37,35 +36,48 @@ export class AuthService {
             const csrfToken = this.http.get(csrfUrl, {
               withCredentials: true
             }).subscribe(
-              (csrfres) => {
+              async (csrfres) => {
                 console.log('CSRF data response:', csrfres);
                 const csrfResponse = csrfres;
                 // tslint:disable-next-line:no-string-literal
                 this.cookieService.set('CSRF_NONCE', csrfResponse['items'][0]['attributes']['nonce']);
-                // const self = this;
-                // const headers = new Headers({
-                //   'Content-Type': 'application/json',
-                //   'CSRF_NONCE': csrfResponse['items'][0]['attributes']['nonce']
+                const self = this;
+                const events = this.http.post<any>(eventsUrl, "ALL", {
+                  // headers: {
+                  //   'Content-Type': 'application/json',
+                  //   'Access-Control-Allow-Credentials': '*',
+                  //   CSRF_NONCE: csrfres['items'][0]['attributes']['nonce'],
+                  //   // Cookie: 'JSSESIONID=' + self.cookieService.get('JSSESIONID')
+                  // },
+                  withCredentials: true
+                }).subscribe(
+                  (eventRes) => {
+                    console.log('Event response: ', eventRes);
+                  },
+                  (eventError) => {
+                    console.log('Event error: ', eventError);
+                  }
+                );
+                console.log(events);
+
+                // let headers = new HttpHeaders({
+                //   'Content-Type': 'text/plain',
+                //   'CSRF_NONCE': csrfres['items'][0]['attributes']['nonce']
                 // });
-                // const options = new RequestOptions({headers: headers, withCredentials: true});
-
-                let headers = new HttpHeaders({
-                  'Content-Type': 'application/json',
-                  'CSRF_NONCE': csrfResponse['items'][0]['attributes']['nonce']
-                });
-                const options = {
-                  headers: headers
-                };
-
-                const events = this.http.post(eventsUrl, "ONGOING", options)
-                  .subscribe(
-                    (eventRes) => {
-                      console.log('Event response: ', eventRes);
-                    },
-                    (eventErr) => {
-                      console.log('Event response: ', eventErr);
-                    }
-                  );
+                // const options = {
+                //   withCredentials: true,
+                //   // headers: headers
+                // };
+                //
+                // const events = this.http.post(eventsUrl, '"ONGOING"', options)
+                //   .subscribe(
+                //     (eventRes) => {
+                //       console.log('Event response: ', eventRes);
+                //     },
+                //     (eventErr) => {
+                //       console.log('Event response: ', eventErr);
+                //     }
+                //   );
               },
               (csrferr) => {
                 console.log('CSRF data error:', csrferr);

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {EventsService} from '../services/events.service';
 import {HttpClient} from '@angular/common/http';
 
-// const realTimeAPI = new RealTimeAPI('wss://chat.material-exchange.com/websocket');
+// const realTimeAPI = new RealTimeAPI('wss://chat10.material-exchange.com/websocket');
 // realTimeAPI.keepAlive().subscribe();
 // const auth = realTimeAPI.login('nemanja91.bacic', 'Skidalica991.');
 // auth.subscribe(
