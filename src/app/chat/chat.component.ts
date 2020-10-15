@@ -5,7 +5,7 @@ import { RealTimeAPI } from 'rocket.chat.realtime.api.rxjs';
 import { CookieService } from 'ngx-cookie-service'; // https://www.npmjs.com/package/rocket.chat.realtime.api.rxjs
 
 
-const realTimeAPI = new RealTimeAPI('wss://chat.material-exchange.com/websocket');
+const realTimeAPI = new RealTimeAPI('wss://chat10.material-exchange.com/websocket');
 
 @Component({
   selector: 'app-chat',
@@ -194,6 +194,7 @@ export class ChatComponent implements OnInit {
   currentUserName: string;
   currentUser: string;
   observable: any;
+  usersList: any;
 
 
   constructor(
@@ -283,7 +284,10 @@ export class ChatComponent implements OnInit {
   }
   async ngOnInit(): Promise<void> {
     // this.events = this.eventsService.getEvents();
+    // this.loginCredentials = await this.eventsService.loginAndGetToken('test1', 'Qp7fCHWthlJi-5j5');
     this.loginCredentials = await this.eventsService.loginAndGetToken('nemanja91.bacic', 'Skidalica991.');
+    this.usersList = await this.eventsService.getListOfUsers();
+    console.log(this.usersList);
     this.channels = await this.eventsService.getListOfChannels(); // https://docs.rocket.chat/api/rest-api/methods/channels/list
     this.subscription = await this.eventsService.getSubscription(); // https://docs.rocket.chat/api/rest-api/methods/subscriptions/get
     // this.getUserInfo = await this.eventsService.getUserAvatar('xzkARGsFmA6nvaZax');
@@ -299,8 +303,15 @@ export class ChatComponent implements OnInit {
     this.observable.subscribe(
       (data) => console.log('Data: ', data),
       (err) => console.log(err),
-      () => console.log('completed'));   // Finaly subscribing to observable
+      (data) => console.log(data));   // Finaly subscribing to observable
 
+    realTimeAPI.onMessage((message: any) => {
+      console.log('Message: ', message);
+      if (message.msg === 'ping') {
+        realTimeAPI.sendMessage({ msg: 'pong' });
+        console.log('Pong sent');
+      }
+    });
   }
 
 }

@@ -52,7 +52,7 @@
             <li *ngFor="let user of channelMembers | filter:searchText" (click)="showSingleChatInfo(user.username, user._id)">
               <div class="peoples-item d-flex align-content-start">
                 <div class="left-side">
-                  <img *ngIf="user && user.username; else demoUserAvatar" style="max-width: 40px; width: 100%; border-radius: 13px;" src="https://chat.material-exchange.com/avatar/{{user.username}}" alt="">
+                  <img *ngIf="user && user.username; else demoUserAvatar" style="max-width: 40px; width: 100%; border-radius: 13px;" src="https://chat10.material-exchange.com/avatar/{{user.username}}" alt="">
                   <ng-template #demoUserAvatar>
                     <img style="max-width: 40px; width: 100%; border-radius: 13px;" src="https://www.pngkey.com/png/detail/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png" alt="">
                   </ng-template>
@@ -76,7 +76,7 @@
         <div class="data-info">
           <div class="left-side">
             <img *ngIf="currentUser; else demoImage"
-              style="width: 40px; border-radius: 13px;" src="https://chat.material-exchange.com/avatar/{{currentUser}}" class="channel-img" alt="Person Name">
+              style="width: 40px; border-radius: 13px;" src="https://chat10.material-exchange.com/avatar/{{currentUser}}" class="channel-img" alt="Person Name">
             <ng-template #demoImage>
               <img
                 style="width: 40px; border-radius: 13px;" src="https://www.pngkey.com/png/detail/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png" class="channel-img" alt="Person Name">
@@ -94,7 +94,7 @@
       </div>
       <div class="single-chat-info">
         <div class="chat-item" *ngFor="let singleMessage of singleChatMessages" [class.me]="singleMessage.itsMe == 'me'">
-          <img src="https://chat.material-exchange.com/avatar/{{singleMessage.u.username}}" alt="{{singleMessage.u.username}}">
+          <img src="https://chat10.material-exchange.com/avatar/{{singleMessage.u.username}}" alt="{{singleMessage.u.username}}">
           <div class="users-message-content">
             <p class="users-name">{{ singleMessage.u.username }}</p>
             <p class="users-message-date">{{ singleMessage._updatedAt | amTimeAgo}}</p>
@@ -173,7 +173,7 @@
                     </div>
                     <div class="right-side col-md-10">
                       <div class="top-part d-flex align-items-center justify-content-between">
-                        <span class="peoples-name">{{ channel.fname }}</span>
+                        <span class="peoples-name">{{ channel.name }}</span>
 
                       </div>
                       <div class="bottom-part">
@@ -195,23 +195,23 @@
           <div class="chat-wrapper-list dms">
             <div class="peoples-list">
               <ul>
-                <li *ngFor="let dms of dms" (click)="showSingleChatInfo(32131)">
+                <li *ngFor="let user of usersList" (click)="showSingleChatInfo(user.username, user._id)">
                   <div class="peoples-item d-flex align-content-start">
-                    <div class="left-side" [class.is-online]="dms.is_online">
+                    <div class="left-side" [class.is-online]="user.status != 'offline'">
                       <div class="img-wrapper">
-                        <img src="./assets/img/chat/{{ dms.picture }}.svg" alt="channel-img">
+                        <img style="width: 40px;" src="https://chat10.material-exchange.com/avatar/{{user.username}}" alt="channel-img">
                       </div>
                     </div>
                     <div class="right-side col-md-10">
                       <div class="top-part d-flex align-items-center justify-content-between">
-                        <span class="peoples-name">{{ dms.name }}</span>
+                        <span class="peoples-name">{{ user.name }}</span>
 
                       </div>
                       <div class="bottom-part">
-                        <span class="peoples-date">Members: {{ dms.message_text }}</span>
+                        <span class="peoples-date">Message: {{ user._id }}</span>
                       </div>
-                      <span class="peoples-messages" [class.messages-num]="dms.messages != 0">
-                        <span>{{ dms.messages }}</span>
+                      <span class="peoples-messages">
+                        <span>10</span>
                       </span>
                     </div>
                   </div>
