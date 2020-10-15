@@ -304,13 +304,19 @@ export class ChatComponent implements OnInit {
       console.log('Message: ', message);
     });
 
-    // Get subscriptions, will respond with message from server
+    // Error handling
+    realTimeAPI.onError((error: any) => {
+      console.log('Error: ', error);
+    });
+
+    // Get subscriptions, will respond with message from server as { msg: 'result' .... }
     realTimeAPI.sendMessage({
       msg: 'method',
       method: 'subscriptions/get',
       id: '42',
       params: [{ $date: 0 }]
     });
+
   }
 
 }
