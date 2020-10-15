@@ -295,22 +295,21 @@ export class ChatComponent implements OnInit {
 
     // Socket
     realTimeAPI.connectToServer(); // handshake
-    realTimeAPI.keepAlive();  // sends ping-pong
-    realTimeAPI.subscribe();  // subscribing
+    realTimeAPI.keepAlive().subscribe();  // keep alive `ping-pong`
 
-    this.observable = realTimeAPI.loginWithAuthToken(this.loginCredentials.data.authToken);  // login and create observable;
+    realTimeAPI.loginWithAuthToken(this.loginCredentials.data.authToken).subscribe();  // login and create observable;
 
-    this.observable.subscribe(
-      (data) => console.log('Data: ', data),
-      (err) => console.log(err),
-      (data) => console.log(data));   // Finaly subscribing to observable
-
+    // Messages from server
     realTimeAPI.onMessage((message: any) => {
       console.log('Message: ', message);
-      if (message.msg === 'ping') {
-        realTimeAPI.sendMessage({ msg: 'pong' });
-        console.log('Pong sent');
-      }
+    });
+
+    // Get subscriptions, will respond with message from server
+    realTimeAPI.sendMessage({
+      msg: 'method',
+      method: 'subscriptions/get',
+      id: '42',
+      params: [{ $date: 0 }]
     });
   }
 
