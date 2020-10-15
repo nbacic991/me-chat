@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import {User} from '../user';
+import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,23 +12,48 @@ import {User} from '../user';
 })
 export class LoginComponent implements OnInit {
   loginUrl = '/login';
+  message = 'status: N/A';
+  logginMessage: any;
 
   constructor(
     private http: HttpClient,
+    public authService: AuthService,
+    public router: Router
   ) {
   }
 
   totalAngularPackages;
   title = 'MaterialExchange - Login';
   topics = ['Angular', 'React', 'Vue'];
-  userModel = new User('', '');
+  userModel = new User('nemanja91.bacic', 'Skidalica991.');
 
+  // login(): void {
+  //   this.authService.login().subscribe((res) => {
+  //     if (this.authService.isLoggedIn) {
+  //       const redirect = this.authService.redirectUrl ? this.router.parseUrl(this.authService.redirectUrl) : 'login';
+  //       this.message = 'status: logged in';
+  //
+  //       this.router.navigateByUrl(redirect);
+  //     }
+  //   });
+  // }
+  // async logMeIn(username, password): Promise<void> {
+  //
+  //   this.logginMessage = await this.authService.logMeIn(username, password);
+  //
+  // }
 
-  formSubmit(): void {
+  logout(): void {
+    this.authService.logout();
+    this.message = 'status: logged out';
+  }
+
+  async formSubmit(): Promise<void> {
     const userData = {
-      user: this.userModel.name,
-      password: this.userModel.password
+      j_username: this.userModel.name,
+      j_password: this.userModel.password
     };
+    this.logginMessage = await this.authService.logMeIn();
     // this.http.post(this.loginUrl, userData).subscribe(
     //   (response) => {
     //     console.log(response);
@@ -41,11 +68,9 @@ export class LoginComponent implements OnInit {
     // });
   }
 
+
   ngOnInit(): void {
-    // this.http.get<any>('https://api.npms.io/v2/search?q=scope:angular').subscribe(data => {
-    //   this.totalAngularPackages = data.total;
-    //   console.log(data);
-    // });
+    this.logginMessage = this.authService.logMeIn();
   }
 
 }
