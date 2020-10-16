@@ -4,36 +4,6 @@ import { CookieService } from 'ngx-cookie-service';
 
 // Login response example
 
-const hcResponse = {
-  status: 'success',
-  data: {
-    authToken: '-CpG99ucW9sDOCg0ttB4j-Ayc8nMy3qE0OeE0y0WGNy',
-    userId: 'DvBynZpPmGuoFuMxv',
-    me: {
-      _id: 'aYjNnig8BEAWeQzMh',
-      name: 'Rocket Cat',
-      emails: [
-        {
-          address: 'rocket.cat@rocket.chat',
-          verified: false
-        }
-      ],
-      status: 'offline',
-      statusConnection: 'offline',
-      username: 'rocket.cat',
-      utcOffset: -3,
-      active: true,
-      roles: [
-        'admin'
-      ],
-      settings: {
-        preferences: {}
-      },
-      avatarUrl: 'http://localhost:3000/avatar/test'
-    }
-  }
-};
-
 @Injectable({
   providedIn: 'root'
 })
@@ -80,6 +50,7 @@ export class EventsService {
         })
       });
       const resToJson = await response.json();
+      // console.log(resToJson);
       this.cookieService.set('chatToken', resToJson.data.authToken); // set token in cookie
       this.cookieService.set('userId', resToJson.data.me._id); // set userId in cookie
       this.cookieService.set('userNewId', resToJson.data.userId); // set userId in cookie
@@ -116,7 +87,32 @@ export class EventsService {
 
   async getSingleChannel(channelId): Promise<any> {
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/channels.messages?roomId=${channelId}&count=100`, {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/channels.messages?roomId=${channelId}&count=20&offset=0`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
+        },
+        // body: JSON.stringify({
+        //   offset: 10,
+        //   count: 5
+        // })
+      });
+      const resToJson = await response.json();
+      // console.log(resToJson.messages);
+      const retData = resToJson.messages;
+      return retData;
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
+  async loadMoreChannelMessages(channelId, offsetNum): Promise<any> {
+    console.log(offsetNum);
+    try {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/channels.messages?roomId=${channelId}&count=5&offset=${offsetNum}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',

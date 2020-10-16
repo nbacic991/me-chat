@@ -1,6 +1,17 @@
 <div class="app-header d-flex">
   <div class="right-side ml-auto">
     <img src="./assets/img/home/shopping-cart.svg" alt="">
-    <img src="./assets/img/home/40px.svg" alt="">
+    <img *ngIf="currentUser; else demoImage"
+         style="width: 40px; border-radius: 50%;"
+         src="https://chat10.material-exchange.com/avatar/{{currentUser.data.me.username}}"
+         title="{{currentUser.data.me.name}}"
+         class="channel-img"
+         alt="{{currentUser.data.me.name}}">
+    <ng-template #demoImage>
+      <img
+        style="width: 40px; border-radius: 50%;"
+        src="https://www.pngkey.com/png/detail/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png"
+        class="channel-img" alt="Person Name">
+    </ng-template>
   </div>
 </div>

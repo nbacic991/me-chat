@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
   totalAngularPackages;
   title = 'MaterialExchange - Login';
   topics = ['Angular', 'React', 'Vue'];
-  userModel = new User('nemanja91.bacic', 'Skidalica991.');
+  userModel = new User('', '');
 
   // login(): void {
   //   this.authService.login().subscribe((res) => {
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
       j_username: this.userModel.name,
       j_password: this.userModel.password
     };
-    this.logginMessage = await this.authService.logMeIn();
+    this.logginMessage = await this.authService.logMeIn(this.userModel.name, this.userModel.password);
     // this.http.post(this.loginUrl, userData).subscribe(
     //   (response) => {
     //     console.log(response);
@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.logginMessage = this.authService.logMeIn();
+    this.logginMessage = this.authService.logMeIn(this.userModel.name, this.userModel.password);
   }
 
 }

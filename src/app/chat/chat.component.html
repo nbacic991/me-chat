@@ -1,7 +1,7 @@
 <div class="chat-comp">
   <div class="chat-comp-wrapper col-md-3" [class.hide-chat]="status">
     <!--Single Channel -->
-    <div class="single-chat-data" [class.shown]="singleData">
+    <div class="single-chat-data"  [class.shown]="singleData">
       <div class="top-data">
         <img (click)="getAllChannels()" class="back-arrow" src="./assets/img/chat/back-arrow.svg"
              alt="back arrow">
@@ -17,15 +17,17 @@
         <img src="./assets/img/chat/channel-people-icon.svg" class="users-list-arrow" alt="channel peoples"
              (click)="channelUsers(currentChannelId)">
       </div>
-      <div class="single-chat-info" *ngIf="channelInfo" >
-        <div class="chat-item" *ngFor="let message of channelInfo" [class.me]="message.u._id == 'BrpLPfjeWHL9Mm5Di'">
+      <div class="single-chat-info" *ngIf="channelInfo" (scroll)="getScrollingElement($event, currentChannelId)">
+        <div class="chat-item" *ngFor="let message of channelInfo" [class.me]="message && message.u && message.u._id == 'BrpLPfjeWHL9Mm5Di'">
           <div class="users-message-content" *ngIf="message && message.name && message.name.user && message.name.user.name">
-            <p class="users-name exists">{{message.name.user.name}}</p>
-            <p class="users-message-date">{{message._updatedAt | amTimeAgo}}</p>
-            <p class="users-message">{{message.msg}}</p>
+            <p class="users-name exists" *ngIf="message && message.name && message.name.user && message.name.user.name">{{message.name.user.name}}</p>
+            <p class="users-message-date" *ngIf="message && message._updatedAt">{{message._updatedAt | amTimeAgo}}</p>
+            <p class="users-message" *ngIf="message && message.msg">{{message.msg}}</p>
           </div>
         </div>
+        <div class="loading-messages" *ngIf="loadingMessages == ''">Loading messages</div>
       </div>
+
     </div>
     <!--Single Channel Users -->
     <div class="channel-users-list" [class.shown]="showChannelUsers">
@@ -168,8 +170,6 @@
                       <img src="./assets/img/chat/channel.svg" alt="channel-img">
                       <img class="locked-channel-icon"
                            src="./assets/img/chat/channel-lock.svg" alt="locked-channel">
-                      <!--                      <img [class.lockedin]="channel.locked != true" class="locked-channel-icon"-->
-                      <!--                           src="./assets/img/chat/channel-lock.svg" alt="locked-channel">-->
                     </div>
                     <div class="right-side col-md-10">
                       <div class="top-part d-flex align-items-center justify-content-between">

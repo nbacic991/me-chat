@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { EventsService } from '../services/events.service';
 import { HttpClient } from '@angular/common/http';
 import { RealTimeAPI } from 'rocket.chat.realtime.api.rxjs';
-import { CookieService } from 'ngx-cookie-service'; // https://www.npmjs.com/package/rocket.chat.realtime.api.rxjs
+import { map } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
+import {Observable} from "rxjs"; // https://www.npmjs.com/package/rocket.chat.realtime.api.rxjs
 
 
 const realTimeAPI = new RealTimeAPI('wss://chat10.material-exchange.com/websocket');
@@ -12,6 +14,8 @@ const realTimeAPI = new RealTimeAPI('wss://chat10.material-exchange.com/websocke
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
+
+
 export class ChatComponent implements OnInit {
   peoples = [
     {
@@ -196,11 +200,38 @@ export class ChatComponent implements OnInit {
   observable: any;
   usersList: any;
 
+  /**
+   * Test
+   */
+  newMessages: any;
+  loadingMessages: string;
+
 
   constructor(
     private eventsService: EventsService,
     private cookieService: CookieService
   ) {
+  }
+
+  async getScrollingElement(event, channelId): Promise<any> {
+    // console.log(event);
+    this.loadingMessages = 'Loading new messages...';
+    if (event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight)
+    {
+      const offset = this.channelInfo.length;
+      this.newMessages = await this.eventsService.loadMoreChannelMessages(channelId, offset);
+      this.channelInfo = this.channelInfo.concat(this.newMessages);
+      const promises = this.channelInfo.map(async (item) => {
+        // console.log(item.u);
+        if (item.u && item.u && item.u._id) {
+          const userName = await this.getUserInfo(item.u._id);
+          item.name = userName;
+        }
+      });
+      await Promise.all(promises);
+      // console.log(this.channelInfo);
+    }
+
   }
 
   hideChat(): void {
@@ -216,7 +247,6 @@ export class ChatComponent implements OnInit {
     this.currentChannel = this.channelData.channel.name;
     this.currentChannelId = channelId;
     this.currentChannelMembers = this.channelData.channel.usersCount;
-    console.log(this.channelData);
     this.channelInfo = await this.eventsService.getSingleChannel(channelId);
     const promises = this.channelInfo.map(async (item) => {
       const userName = await this.getUserInfo(item.u._id);
@@ -242,7 +272,7 @@ export class ChatComponent implements OnInit {
     this.singleChatInfo = !this.singleChatInfo;
     this.singleChatMessages = await this.eventsService.singleUserMessages(userUsername);
     const myToken = this.cookieService.get('userNewId');
-    console.log(this.singleChatMessages);
+    // console.log(this.singleChatMessages);
     const promises = this.singleChatMessages.map((item) => {
       const token = item.u._id;
       if (token === myToken) {
@@ -253,9 +283,8 @@ export class ChatComponent implements OnInit {
     const userInfo = await this.eventsService.getUserInfo(userID);
     this.currentUserName = userInfo.user.name;
     this.currentUser = userUsername;
-    console.log(userInfo);
+    // console.log(userInfo);
   }
-
   async sendDirectUserMessage(userName, messageText): Promise<void> {
     const myToken = this.cookieService.get('userNewId');
     const user = '@' + userName;
@@ -274,7 +303,6 @@ export class ChatComponent implements OnInit {
       await Promise.all(promises);
     }
   }
-
   async getUserInfo(userID): Promise<void> {
     return this.eventsService.getUserInfo(userID);
   }
@@ -284,11 +312,11 @@ export class ChatComponent implements OnInit {
   }
   async ngOnInit(): Promise<void> {
     // this.events = this.eventsService.getEvents();
-    // this.loginCredentials = await this.eventsService.loginAndGetToken('test1', 'Qp7fCHWthlJi-5j5');
-    this.loginCredentials = await this.eventsService.loginAndGetToken('nemanja91.bacic', 'Skidalica991.');
+    this.loginCredentials = await this.eventsService.loginAndGetToken('test1', 'Qp7fCHWthlJi-5j5');
+    // this.loginCredentials = await this.eventsService.loginAndGetToken('nemanja91.bacic', 'Skidalica991.');
     this.usersList = await this.eventsService.getListOfUsers();
-    console.log(this.usersList);
     this.channels = await this.eventsService.getListOfChannels(); // https://docs.rocket.chat/api/rest-api/methods/channels/list
+    console.log(this.channels);
     this.subscription = await this.eventsService.getSubscription(); // https://docs.rocket.chat/api/rest-api/methods/subscriptions/get
     // this.getUserInfo = await this.eventsService.getUserAvatar('xzkARGsFmA6nvaZax');
     realTimeAPI.callMethod('rooms/get', [{ $date: 0 }]);
