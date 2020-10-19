@@ -165,6 +165,7 @@ export class EventsComponent implements OnInit {
       message: ''
     }
   ];
+  newEvents: any;
   channels: any;
   loginCredentials: any;
   subscription: any;
@@ -178,8 +179,8 @@ export class EventsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.events = this.eventsService.getAllEvents('ALL');
-    console.log('Events', this.events);
+    // this.newEvents = this.eventsService.getAllEvents('ALL');
+    console.log('Live Events: ', this.newEvents);
   }
 
 }

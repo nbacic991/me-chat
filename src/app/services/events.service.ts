@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { CookieService } from 'ngx-cookie-service';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {CookieService} from 'ngx-cookie-service';
 
 // Login response example
 
@@ -10,29 +10,67 @@ import { CookieService } from 'ngx-cookie-service';
 export class EventsService {
   token: string = this.cookieService.get('chatToken');
   userId: string = this.cookieService.get('userId');
+
   constructor(
     private http: HttpClient,
     private cookieService: CookieService
-  ) { }
+  ) {
+  }
 
   async getAllEvents(eventType: string): Promise<any> {
-    try {
-      const response = await fetch('https://dev-library-master.material-exchange.com:8443/Windchill/servlet/rest/meapi/company/getActiveShows', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          Accept: '*/*',
-        },
-        body: JSON.stringify({
-          eventType
-        })
-      });
-      const resToJson = await response.json();
-      return resToJson;
-    } catch {
+    const host = 'https://library-master.material-exchange.com:8443';
+    const csrfUrl = host + '/Windchill/servlet/rest/security/csrf';
+    const eventsUrl = 'https://library-master.material-exchange.com:8443/Windchill/servlet/rest/meapi/company/getActiveShows';
 
+    try {
+      const csrfToken = this.http.get(csrfUrl, {
+        withCredentials: true
+      }).subscribe(
+        (res) => {
+          console.log('CSRF response: ', res);
+          try {
+            const eventItems = this.http.post(eventsUrl, "ALL", {
+              withCredentials: true,
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                // tslint:disable-next-line:no-string-literal
+                'CSRF_NONCE': res['items'][0]['attributes']['nonce'],
+                Accept: '*/*',
+              },
+            }).subscribe(
+              (evRes) => {
+                console.log('events res:', evRes);
+              },
+              (err) => {
+                console.log('events err:', err);
+              }
+            );
+            // const response = await fetch('https://library-master.material-exchange.com:8443/Windchill/servlet/rest/meapi/company/getActiveShows', {
+            //   method: 'POST',
+            //   headers: {
+            //
+            //   },
+            //   credentials: 'include',
+            //   body: "ALL",
+            //   mode: 'no-cors'
+            // });
+            // const resToJson = await response.json();
+            // return resToJson;
+          } catch (error){
+            console.log('Events try err:', error);
+          }
+        },
+        (err) => {
+          console.log('CSRF Error: ', err);
+        }
+      );
+
+    } catch (error) {
+      console.log('CSRF error:', error);
     }
+
   }
+
   async loginAndGetToken(user: string, password: string): Promise<any> {
     try {
       // {"ldap":true,"username":"nemanja91.bacic","ldapPass":"Skidalica991.","ldapOptions":{}}
@@ -56,8 +94,7 @@ export class EventsService {
       this.cookieService.set('userNewId', resToJson.data.userId); // set userId in cookie
       // return resToJson;
       return resToJson;  // hard coded response, login returns error 403 "User has no password set"
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error.message);
     }
   }
@@ -65,6 +102,25 @@ export class EventsService {
   /**
    * Channels
    */
+  async getFeedList(): Promise<any> {
+    try {
+      const response = await fetch('https://chat10.material-exchange.com/api/v1/groups.list', {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
+        }
+      });
+      const firstResp = await response.json();
+      const resToJson = firstResp.groups;
+      return resToJson;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   async getListOfChannels(): Promise<any> {
     try {
       const response = await fetch('https://chat10.material-exchange.com/api/v1/channels.list', {
@@ -79,8 +135,7 @@ export class EventsService {
       const firstResp = await response.json();
       const resToJson = firstResp.channels;
       return resToJson;
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error.message);
     }
   }
@@ -104,11 +159,11 @@ export class EventsService {
       // console.log(resToJson.messages);
       const retData = resToJson.messages;
       return retData;
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error.message);
     }
   }
+
   async loadMoreChannelMessages(channelId, offsetNum): Promise<any> {
     console.log(offsetNum);
     try {
@@ -129,11 +184,11 @@ export class EventsService {
       // console.log(resToJson.messages);
       const retData = resToJson.messages;
       return retData;
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error.message);
     }
   }
+
   async getSingleChannelInfo(channelId): Promise<any> {
     try {
       const response = await fetch(`https://chat10.material-exchange.com/api/v1/channels.info?roomId=${channelId}`, {
@@ -151,11 +206,11 @@ export class EventsService {
       });
       const resToJson = await response.json();
       return resToJson;
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error.message);
     }
   }
+
   async getSingleChannelUsers(channelId): Promise<any> {
     try {
       const response = await fetch(`https://chat10.material-exchange.com/api/v1/channels.members?roomId=${channelId}&count=200`, {
@@ -170,8 +225,47 @@ export class EventsService {
       const firstResp = await response.json();
       const resToJson = firstResp.members;
       return resToJson;
+    } catch (error) {
+      console.log(error.message);
     }
-    catch (error) {
+  }
+
+  /**
+   * Feed
+   */
+  async getFeedInfo(groupId): Promise<any> {
+    try {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/groups.info?roomId=${groupId}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
+        }
+      });
+      const firstResp = await response.json();
+      return firstResp;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async getFeedMessages(groupId): Promise<any> {
+    try {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/groups.messages?roomId=${groupId}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
+        }
+      });
+      const firstResp = await response.json();
+      const resMessages = firstResp.messages;
+      return resMessages;
+    } catch (error) {
       console.log(error.message);
     }
   }
@@ -193,11 +287,11 @@ export class EventsService {
       const firstResp = await response.json();
       const resToJson = firstResp.users;
       return resToJson;
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error.message);
     }
   }
+
   async getUserInfo(userID): Promise<any> {
     try {
       const response = await fetch(`https://chat10.material-exchange.com/api/v1/users.info?userId=${userID}`, {
@@ -213,11 +307,11 @@ export class EventsService {
       const firstResp = await response.json();
       // console.log(firstResp);
       return firstResp;
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error.message);
     }
   }
+
   async singleUserMessages(userUsername): Promise<any> {
     try {
       const response = await fetch(`https://chat10.material-exchange.com/api/v1/im.messages?username=${userUsername}`, {
@@ -233,11 +327,11 @@ export class EventsService {
       const firstResp = await response.json();
       const finalResp = firstResp.messages;
       return finalResp;
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error.message);
     }
   }
+
   async getSubscription(): Promise<any> {
     try {
       const response = await fetch('https://chat10.material-exchange.com/api/v1/subscriptions.get', {
@@ -251,8 +345,7 @@ export class EventsService {
       });
       const resToJson = await response.json();
       return resToJson;
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error.message);
     }
   }
@@ -263,7 +356,7 @@ export class EventsService {
   async sendDirectMessage(userID: string, messageText: string): Promise<any> {
 
     const data = {
-      channel: userID,
+      channel: '@' + userID,
       text: messageText
     };
     try {
@@ -280,8 +373,7 @@ export class EventsService {
 
       const firstResp = await response.json();
       return firstResp;
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error.message);
     }
   }

@@ -5,6 +5,7 @@ import { RealTimeAPI } from 'rocket.chat.realtime.api.rxjs';
 import { map } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import {Observable} from "rxjs"; // https://www.npmjs.com/package/rocket.chat.realtime.api.rxjs
+import { ToastrService } from 'ngx-toastr';
 
 
 const realTimeAPI = new RealTimeAPI('wss://chat10.material-exchange.com/websocket');
@@ -17,171 +18,14 @@ const realTimeAPI = new RealTimeAPI('wss://chat10.material-exchange.com/websocke
 
 
 export class ChatComponent implements OnInit {
-  peoples = [
-    {
-      picture: 'jeans',
-      name: 'Jeans & Co.',
-      date: 'Oct 8, 12:15pm',
-      position: 'Co-founder & Co-CEO, TechSt...',
-      message: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed fermentum aq... '
-    },
-    {
-      picture: 'jeans',
-      name: 'Jeans & Co.',
-      date: 'Oct 8, 12:15pm',
-      position: 'Co-founder & Co-CEO, TechSt...',
-      message: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed fermentum aq... '
-    },
-    {
-      picture: 'jeans',
-      name: 'Jeans & Co.',
-      date: 'Oct 8, 12:15pm',
-      position: 'Co-founder & Co-CEO, TechSt...',
-      message: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed fermentum aq... '
-    },
-    {
-      picture: 'jeans',
-      name: 'Jeans & Co.',
-      date: 'Oct 8, 12:15pm',
-      position: 'Co-founder & Co-CEO, TechSt...',
-      message: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed fermentum aq... '
-    },
-    {
-      picture: 'jeans',
-      name: 'Jeans & Co.',
-      date: 'Oct 8, 12:15pm',
-      position: 'Co-founder & Co-CEO, TechSt...',
-      message: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed fermentum aq... '
-    },
-    {
-      picture: 'jeans',
-      name: 'Jeans & Co.',
-      date: 'Oct 8, 12:15pm',
-      position: 'Co-founder & Co-CEO, TechSt...',
-      message: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed fermentum aq... '
-    },
-    {
-      picture: 'jeans',
-      name: 'Jeans & Co.',
-      date: 'Oct 8, 12:15pm',
-      position: 'Co-founder & Co-CEO, TechSt...',
-      message: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed fermentum aq... '
-    },
-    {
-      picture: 'jeans',
-      name: 'Jeans & Co.',
-      date: 'Oct 8, 12:15pm',
-      position: 'Co-founder & Co-CEO, TechSt...',
-      message: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed fermentum aq... '
-    },
-    {
-      picture: 'jeans',
-      name: 'Jeans & Co.',
-      date: 'Oct 8, 12:15pm',
-      position: 'Co-founder & Co-CEO, TechSt...',
-      message: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed fermentum aq... '
-    },
-    {
-      picture: 'jeans',
-      name: 'Jeans & Co.',
-      date: 'Oct 8, 12:15pm',
-      position: 'Co-founder & Co-CEO, TechSt...',
-      message: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed fermentum aq... '
-    },
-    {
-      picture: 'jeans',
-      name: 'Jeans & Co.',
-      date: 'Oct 8, 12:15pm',
-      position: 'Co-founder & Co-CEO, TechSt...',
-      message: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed fermentum aq... '
-    },
-    {
-      picture: 'jeans',
-      name: 'Jeans & Co.',
-      date: 'Oct 8, 12:15pm',
-      position: 'Co-founder & Co-CEO, TechSt...',
-      message: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed fermentum aq... '
-    }
-  ];
-  dms = [
-    {
-      picture: 'letter_a',
-      name: 'Alma Peterson',
-      message_text: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed ferme... ',
-      messages: 10,
-      is_online: true
-    },
-    {
-      picture: 'peter_johnson',
-      name: 'Peter Johnson',
-      message_text: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed ferme... ',
-      messages: 10,
-      is_online: true
-    },
-    {
-      picture: 'peter_johnson',
-      name: 'Peter Johnson',
-      message_text: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed ferme... ',
-      messages: 10,
-      is_online: true
-    },
-    {
-      picture: 'peter_johnson',
-      name: 'Peter Johnson',
-      message_text: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed ferme... ',
-      messages: 10,
-      is_online: true
-    },
-    {
-      picture: 'peter_johnson',
-      name: 'Peter Johnson',
-      message_text: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed ferme... ',
-      messages: 10,
-      is_online: true
-    },
-    {
-      picture: 'letter_a',
-      name: 'Alma Peterson',
-      message_text: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed ferme... ',
-      messages: 10,
-      is_online: true
-    },
-    {
-      picture: 'peter_johnson',
-      name: 'Peter Johnson',
-      message_text: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed ferme... ',
-      messages: 10,
-      is_online: true
-    },
-    {
-      picture: 'peter_johnson',
-      name: 'Peter Johnson',
-      message_text: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed ferme... ',
-      messages: 10,
-      is_online: false
-    },
-    {
-      picture: 'peter_johnson',
-      name: 'Peter Johnson',
-      message_text: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed ferme... ',
-      messages: 10,
-      is_online: true
-    },
-    {
-      picture: 'peter_johnson',
-      name: 'Peter Johnson',
-      message_text: 'Sed sit amet ante at magna vehicula posuere id sit amet arcu. Proin pulvinar felis sed ferme... ',
-      messages: 10,
-      is_online: true
-    }
-  ];
-  filters = ['Designer', 'Leather', 'AI', 'Saas & Enterprise', 'Recrutment & Jobs', 'Social Networking & Collaboration', 'Advertising & Marketing'];
   status: boolean;
   singleData: boolean;
   showChannelUsers: boolean;
   singleChatInfo: boolean;
   messagesLoaded: Promise<boolean>;
 
+  /* Is User Loged In */
+  loggedIn: string;
   channels: any;
   loginCredentials: any;
   subscription: any;
@@ -199,6 +43,15 @@ export class ChatComponent implements OnInit {
   currentUser: string;
   observable: any;
   usersList: any;
+  singleFeed: boolean;
+  feedList: any;
+  currentFeed: any;
+  feedMessages: any;
+
+  /**
+   * Current user
+   */
+  currentChatUser: string;
 
   /**
    * Test
@@ -208,6 +61,7 @@ export class ChatComponent implements OnInit {
 
 
   constructor(
+    private toastr: ToastrService,
     private eventsService: EventsService,
     private cookieService: CookieService
   ) {
@@ -263,8 +117,23 @@ export class ChatComponent implements OnInit {
     this.singleChatInfo = !this.singleChatInfo;
     this.singleData = !this.singleData;
     this.channelMembers = await this.eventsService.getSingleChannelUsers(channelId);
+
   }
 
+  /**
+   * Feed
+   */
+  async getFeedInfo(groupId): Promise<any> {
+    this.singleFeed = !this.singleFeed;
+    this.currentFeed = await this.eventsService.getFeedInfo(groupId);
+    this.feedMessages = await this.eventsService.getFeedMessages(groupId);
+    const promises = this.feedMessages.map(async (item) => {
+      const userName = await this.getUserInfo(item.u._id);
+      item.name = userName;
+    });
+    await Promise.all(promises);
+    console.log(this.currentFeed);
+  }
   /**
    * Users
    */
@@ -272,7 +141,7 @@ export class ChatComponent implements OnInit {
     this.singleChatInfo = !this.singleChatInfo;
     this.singleChatMessages = await this.eventsService.singleUserMessages(userUsername);
     const myToken = this.cookieService.get('userNewId');
-    // console.log(this.singleChatMessages);
+    console.log('Single chat messages: ', this.singleChatMessages);
     const promises = this.singleChatMessages.map((item) => {
       const token = item.u._id;
       if (token === myToken) {
@@ -281,9 +150,19 @@ export class ChatComponent implements OnInit {
     });
     await Promise.all(promises);
     const userInfo = await this.eventsService.getUserInfo(userID);
+    // console.log(userInfo);
+    // // Get subscriptions, will respond with message from server as { msg: 'result' .... }
+    realTimeAPI.sendMessage({
+      msg : 'sub',
+      id : userInfo.user._id,
+      name : 'stream-room-messages',
+      params: [
+        this.singleChatMessages[0].rid,
+        false
+      ]
+    });
     this.currentUserName = userInfo.user.name;
     this.currentUser = userUsername;
-    // console.log(userInfo);
   }
   async sendDirectUserMessage(userName, messageText): Promise<void> {
     const myToken = this.cookieService.get('userNewId');
@@ -310,15 +189,28 @@ export class ChatComponent implements OnInit {
     this.singleData = !this.singleData;
     this.channels = await this.eventsService.getListOfChannels();
   }
+  async getAllFeeds(): Promise<any> {
+    this.singleFeed = !this.singleFeed;
+    this.feedList = await this.eventsService.getFeedList();
+  }
   async ngOnInit(): Promise<void> {
+    // const checkLogin = this.cookieService.get('JSESSIONID');
+    // if (checkLogin) {
+    //   console.log('Logged In');
+    //   this.loggedIn = await this.cookieService.get('JSESSIONID');
+    //   console.log(this.loggedIn);
+    // } else {
+    //   console.log('Not logged in');
+    // }
+
+    this.currentChatUser = this.cookieService.get('userNewId');
+    this.feedList = await this.eventsService.getFeedList();
     // this.events = this.eventsService.getEvents();
-    this.loginCredentials = await this.eventsService.loginAndGetToken('test1', 'Qp7fCHWthlJi-5j5');
-    // this.loginCredentials = await this.eventsService.loginAndGetToken('nemanja91.bacic', 'Skidalica991.');
+    // this.loginCredentials = await this.eventsService.loginAndGetToken('test1', 'Qp7fCHWthlJi-5j5');
+    this.loginCredentials = await this.eventsService.loginAndGetToken('nemanja91.bacic', 'Skidalica991.');
     this.usersList = await this.eventsService.getListOfUsers();
     this.channels = await this.eventsService.getListOfChannels(); // https://docs.rocket.chat/api/rest-api/methods/channels/list
-    console.log(this.channels);
     this.subscription = await this.eventsService.getSubscription(); // https://docs.rocket.chat/api/rest-api/methods/subscriptions/get
-    // this.getUserInfo = await this.eventsService.getUserAvatar('xzkARGsFmA6nvaZax');
     realTimeAPI.callMethod('rooms/get', [{ $date: 0 }]);
 
     // Socket
@@ -328,8 +220,40 @@ export class ChatComponent implements OnInit {
     realTimeAPI.loginWithAuthToken(this.loginCredentials.data.authToken).subscribe();  // login and create observable;
 
     // Messages from server
-    realTimeAPI.onMessage((message: any) => {
+    realTimeAPI.onMessage(async (message: any) => {
       console.log('Message: ', message);
+      switch (message.msg) {
+        case 'result':
+          if (message.id === '42') {
+            message.result.update.map((item) => {
+              const subID = item._id;
+              const subRID = item.rid;
+              /* Subscribtion */
+              realTimeAPI.sendMessage({
+                msg : 'sub',
+                id : subID,
+                name : 'stream-room-messages',
+                params: [
+                  subRID,
+                  false
+                ]
+              });
+            });
+          }
+          // console.log('Result resp:', message);
+
+          break;
+        case 'changed':
+          // console.log('Changed msg:', message);
+          const textOfMessage = await message.fields.args;
+          // const textOfMessage = message.fields.args[0].msg;
+          console.log('Message text: ', textOfMessage[0]);
+          this.singleChatMessages.push(textOfMessage[0]);
+          // console.log('After change, singlechat messages:', this.singleChatMessages);
+          // break;
+        // default:
+        //   console.log('Message: ', message);
+      }
     });
 
     // Error handling
@@ -344,6 +268,8 @@ export class ChatComponent implements OnInit {
       id: '42',
       params: [{ $date: 0 }]
     });
+
+
 
   }
 
