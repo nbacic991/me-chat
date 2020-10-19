@@ -4,23 +4,34 @@
     position: fixed;
     height: 100%;
     right: 0;
-    top: 70px;
+    //top: 70px;
     background-color: #fff;
     padding: 0;
     transition: 500ms ease-in-out;
     z-index: 200;
     max-width: 400px;
     width: 100%;
+    .app-header {
+      padding: 10px;
+      height: 70px;
+      background-color: #fff;
+      z-index: 1;
+      img {
+        margin-left: 15px;
+      }
+    }
     .chat-tabs {
       border-bottom: 1px solid #F1F2F7;
       justify-content: space-around;
       font-family: 'Roboto', sans-serif;
       margin-bottom: 10px;
+
       .nav-link {
         color: #202020 !important;
         border: none;
         border-bottom: 3px solid transparent;
         padding: 10px 30px;
+
         &.active {
           border-bottom-color: #153E6E;
           font-weight: bold;
@@ -33,6 +44,7 @@
       height: 100vh;
 
     }
+
     .chat {
       &-wrapper-list {
         position: absolute;
@@ -40,61 +52,78 @@
         bottom: 105px;
         overflow-y: scroll;
         width: 100%;
+
         .action-holder {
           padding: 24px;
+
           p {
             padding-left: 20px;
             color: #9FA2A8;
             font-size: 12px;
           }
         }
+
         .channels {
           &-list {
             padding: 0 24px;
+
             ul {
               padding-left: 20px;
+
               li {
                 list-style-type: none;
               }
             }
           }
+
           &-item {
             margin: 10px 0;
+
             span {
               display: block;
             }
           }
         }
+
         .peoples {
           &-list {
             padding: 0 10px;
+
             ul {
               padding: 0;
               list-style-type: none;
+
               li {
                 margin: 7px 0;
                 background: #FCFCFD;
+
                 &:nth-of-type(1) {
                   padding-top: 0;
                   margin-top: 0;
                 }
+
                 .peoples-item {
                   transition: 300ms ease-in-out;
                   padding: 10px 0 10px 20px;
+
                   &:hover {
                     background-color: #F1F2F7;
                   }
+
                   .left-side img {
                     border-radius: 13px;
                   }
+
                   .top-part {
                     margin-bottom: 2px;
+
                     .peoples-name {
                       color: #43434A;
                       font-size: 14px;
                       line-height: 19px;
                       font-weight: bold;
                     }
+
                     .peoples-date {
                       margin-left: 20px;
                       color: #63738B;
@@ -102,18 +131,22 @@
                       line-height: 14px;
                     }
                   }
+
                   .bottom-part {
                     span {
                       display: block;
                       font-size: 12px;
                       line-height: 18px;
                     }
+
                     .peoples-message {
                       color: #282A3C;
+
                       &.no-messages {
                         display: none;
                       }
                     }
+
                     .peoples-date {
                       color: #929292;
                       padding-right: 20px;
@@ -124,6 +157,7 @@
             }
           }
         }
+
         &.feed {
           //top: 40px !important;
           .left-side {
@@ -132,6 +166,7 @@
               bottom: inherit !important;
             }
           }
+
           .right-side {
             .peoples-message {
               max-height: 38px;
@@ -139,12 +174,15 @@
             }
           }
         }
+
         &.feed,
         &.channels {
           width: 100%;
           top: 55px;
+
           .left-side {
             position: relative;
+
             .locked-channel-icon {
               position: absolute;
               right: -3px;
@@ -154,6 +192,7 @@
               height: 15px;
             }
           }
+
           .peoples-messages {
             position: absolute;
             right: 0;
@@ -163,13 +202,16 @@
             background-color: #153E6E;
             padding: 2px 5px;
             color: #fff;
+
             &.no-messages {
               display: none;
             }
           }
         }
+
         &.dms {
           top: 55px !important;
+
           .left-side {
             &.is-online {
               .img-wrapper {
@@ -184,6 +226,7 @@
                   border-radius: 50%;
                   z-index: 2;
                 }
+
                 &::after {
                   content: '';
                   position: absolute;
@@ -196,8 +239,10 @@
                 }
               }
             }
+
             .img-wrapper {
               position: relative;
+
               &::before {
                 content: '';
                 position: absolute;
@@ -209,6 +254,7 @@
                 border-radius: 50%;
                 z-index: 2;
               }
+
               &::after {
                 content: '';
                 position: absolute;
@@ -221,6 +267,7 @@
               }
             }
           }
+
           .peoples-messages {
             position: absolute;
             right: 0;
@@ -234,14 +281,17 @@
         }
       }
     }
+
     &.hide-chat {
       right: -25%;
+
       .chat-toggler {
         img {
           transform: rotate(180deg);
         }
       }
     }
+
     .chat-toggler {
       position: absolute;
       left: -29px;
@@ -252,6 +302,7 @@
       display: flex;
       cursor: pointer;
       z-index: -1;
+
       img {
         display: block;
         margin: auto auto auto 10px;
@@ -261,6 +312,7 @@
 
     /* Peoples Tab */
   }
+
   .single-user-information,
   .channel-users-list,
   .single-chat-data {
@@ -271,9 +323,11 @@
     z-index: 11;
     right: -100%;
     transition: 300ms ease-in-out;
+
     &.shown {
       right: 0;
     }
+
     .top-data {
       display: flex;
       align-items: center;
@@ -281,25 +335,31 @@
       padding: 10px 20px;
       min-height: 70px;
       border-bottom: 1px solid #F1F2F7;
+
       .back-arrow,
       .users-list-arrow {
         cursor: pointer;
       }
+
       .data-info {
         display: flex;
         flex-basis: 60%;
         text-align: center;
+
         .channel-img {
           border-radius: 14px;
         }
+
         .right-side {
           flex: 1;
+
           p {
             margin-bottom: 0;
             color: #43434A;
             font-size: 20px;
             line-height: 27px;
           }
+
           span {
             color: #BBBBBB;
             font-size: 12px;
@@ -307,6 +367,7 @@
         }
       }
     }
+
     .single-chat-info {
       padding: 10px 20px;
       top: 72px;
@@ -314,33 +375,41 @@
       overflow-y: scroll;
       position: absolute;
       width: 100%;
+
       .chat-item {
         display: flex;
         align-items: flex-end;
         margin-bottom: 20px;
+
         &.me {
           justify-content: flex-end;
+
           img {
             order: 2;
           }
+
           .users-message-content {
             background-color: #003870;
             margin-right: 10px;
             margin-left: 0;
+
             .users-name,
             .users-message {
               color: #fff;
             }
+
             .users-message-date {
               color: #7798B8;
             }
           }
         }
+
         img {
           width: 40px;
           height: 40px;
           border-radius: 50%;
         }
+
         .users-message-content {
           background-color: #EDEDED;
           border-radius: 10px;
@@ -350,20 +419,24 @@
           justify-content: space-between;
           flex-basis: 60%;
           margin-left: 10px;
+
           .users-name,
           .users-message-date {
             margin-bottom: 3px;
           }
+
           .users-name {
             font-size: 12px;
             line-height: 16px;
             color: #43434A;
             font-weight: 600;
           }
+
           .users-message-date {
             font-size: 10px;
             color: #969696;
           }
+
           .users-message {
             flex-basis: 100%;
             margin: 0;
@@ -375,23 +448,28 @@
       }
     }
   }
+
   .feed-msgs,
   .channel-users-list {
     .data-info {
       margin-right: auto;
       margin-left: 75px;
     }
+
     .single-chat-info {
       ul {
         list-style-type: none;
         padding: 0;
+
         .peoples-item {
           transition: 300ms ease-in-out;
           padding: 10px 20px;
           align-items: center;
+
           &:hover {
             background-color: #F1F2F7;
           }
+
           .peoples-name {
             font-size: 12px;
             line-height: 14px;
@@ -401,13 +479,55 @@
     }
   }
 
+  .feed-msgs {
+    .single-chat-info {
+      padding: 10px !important;
+
+      .chat-item {
+        margin-bottom: 0 !important;
+
+        .users-message-content {
+          border-radius: 4px;
+          margin-left: 0 !important;
+          flex-basis: 100% !important;
+          background-color: transparent !important;
+          transition: 300ms ease-in-out;
+          padding-right: 30px;
+          position: relative;
+          &:hover {
+            background-color: #F1F2F7 !important;
+          }
+          &.full {
+            .users-message {
+              max-height: 9999px;
+            }
+          }
+          .users-message {
+            max-height: 40px;
+            overflow: hidden;
+            transition: 300ms ease-in-out;
+          }
+          img {
+            position: absolute;
+            max-width: 10px;
+            right: 20px;
+            top: 10px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
   .single-user-information {
     display: flex;
     flex-direction: column;
+
     .data-info {
       margin-right: auto;
       margin-left: 75px;
     }
+
     .single-chat-info {
       margin-top: auto;
       margin-bottom: 55px;
@@ -420,6 +540,7 @@
     position: absolute;
     bottom: 70px;
     width: 100%;
+
     input {
       width: 100%;
       max-width: 100%;
@@ -428,6 +549,7 @@
       border-top: 1px solid #F1F2F7;
       outline: 0 !important;
     }
+
     button {
       position: absolute;
       border: none;
@@ -435,12 +557,14 @@
       top: 50%;
       right: 15px;
       transform: translateY(-50%);
+
       &:focus {
         opacity: 0.7;
         outline: 0;
       }
     }
   }
+
   .loading-messages {
     position: relative;
     padding: 15px;
@@ -453,6 +577,7 @@
     width: 100%;
     position: relative;
     padding: 0 20px;
+
     input {
       width: 100%;
       border-radius: 4px;
@@ -462,6 +587,7 @@
       color: #BFBFBF;
       font-size: 12px;
     }
+
     button {
       position: absolute;
       top: 50%;

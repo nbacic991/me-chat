@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import {User} from '../user';
+import { User } from '../user';
 import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
 

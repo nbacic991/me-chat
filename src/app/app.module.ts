@@ -40,7 +40,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     NgbModule,
     MomentModule,
     Ng2SearchPipeModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot({
+      toastClass: 'toast toast-bootstrap-compatibility-fix'
+    })
   ],
   providers: [
     CookieService,

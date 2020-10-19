@@ -18,52 +18,69 @@ export class EventsService {
   }
 
   async getAllEvents(eventType: string): Promise<any> {
-    const host = 'https://library-master.material-exchange.com:8443';
+    const host = 'https://dev-library-master.material-exchange.com:8443';
     const csrfUrl = host + '/Windchill/servlet/rest/security/csrf';
-    const eventsUrl = 'https://library-master.material-exchange.com:8443/Windchill/servlet/rest/meapi/company/getActiveShows';
-
+    const eventsUrl = 'https://dev-library-master.material-exchange.com:8443/Windchill/servlet/rest/meapi/company/getActiveShows';
     try {
-      const csrfToken = this.http.get(csrfUrl, {
-        withCredentials: true
-      }).subscribe(
-        (res) => {
-          console.log('CSRF response: ', res);
-          try {
-            const eventItems = this.http.post(eventsUrl, "ALL", {
-              withCredentials: true,
-              headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                // tslint:disable-next-line:no-string-literal
-                'CSRF_NONCE': res['items'][0]['attributes']['nonce'],
-                Accept: '*/*',
-              },
-            }).subscribe(
-              (evRes) => {
-                console.log('events res:', evRes);
-              },
-              (err) => {
-                console.log('events err:', err);
-              }
-            );
-            // const response = await fetch('https://library-master.material-exchange.com:8443/Windchill/servlet/rest/meapi/company/getActiveShows', {
-            //   method: 'POST',
-            //   headers: {
-            //
-            //   },
-            //   credentials: 'include',
-            //   body: "ALL",
-            //   mode: 'no-cors'
-            // });
-            // const resToJson = await response.json();
-            // return resToJson;
-          } catch (error){
-            console.log('Events try err:', error);
-          }
+      const csrfToken = await fetch(csrfUrl, {
+        method: 'GET',
+        credentials: 'include'
+      });
+      const CSRF = await csrfToken.json();
+      console.log('CSRF token: ', CSRF);
+      const response = await fetch(eventsUrl, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+          CSRF_NONCE: CSRF['items'][0]['attributes']['nonce'],
+          Accept: '*/*',
         },
-        (err) => {
-          console.log('CSRF Error: ', err);
-        }
-      );
+        credentials: 'include',
+        body: JSON.stringify('ALL')
+      });
+      const resToJson = await response.json();
+      return resToJson;
+      // const csrfToken = await this.http.get(csrfUrl, {
+      //   withCredentials: true
+      // }).subscribe(
+      //   async (res) => {
+      //     console.log('CSRF response: ', res);
+      //     // const response = await fetch(eventsUrl, {
+      //     //   method: 'POST',
+      //     //   headers: {
+      //     //     'Content-type': 'application/json',
+      //     //     CSRF_NONCE: res['items'][0]['attributes']['nonce'],
+      //     //     Accept: '*/*',
+      //     //   },
+      //     //   credentials: 'include',
+      //     //   body: JSON.stringify('ALL')
+      //     // });
+      //     // const resToJson = await response.json();
+      //     // return resToJson;
+      //     const eventResponse = await this.http.post(eventsUrl, JSON.stringify('ALL'), {
+      //       withCredentials: true,
+      //       headers: {
+      //         'Content-type': 'application/json',
+      //         //     // tslint:disable-next-line:no-string-literal
+      //         CSRF_NONCE: res['items'][0]['attributes']['nonce'],
+      //         // Accept: '*/*'
+      //       },
+      //     }).subscribe(
+      //       (eveRes) => {
+      //         console.log('Event res: ', eveRes);
+      //       },
+      //       (eveErr) => {
+      //         console.log('Event err: ', eveErr);
+      //       }
+      //     );
+      //     const newEventsData = eventResponse;
+      //     console.log('New Events Data: ', newEventsData);
+      //     return newEventsData;
+      //   },
+      //   (err) => {
+      //     console.log('CSRF Error: ', err);
+      //   }
+      // );
 
     } catch (error) {
       console.log('CSRF error:', error);
