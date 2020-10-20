@@ -21,13 +21,15 @@
       </div>
     </div>
     <!--Single Channel -->
-    <div class="single-chat-data"  [class.shown]="singleData">
+    <div class="single-chat-data" [class.shown]="singleData">
       <div class="top-data">
         <img (click)="getAllChannels()" class="back-arrow" src="./assets/img/chat/back-arrow.svg"
              alt="back arrow">
         <div class="data-info">
           <div class="left-side">
-            <img src="./assets/img/chat/channel.svg" class="channel-img" alt="Channel Name">
+            <img *ngIf="currentChannel" style="width: 40px;"
+                 src="https://chat10.material-exchange.com/avatar/{{currentChannel}}"
+                 class="channel-img" alt="currentChannel">
           </div>
           <div class="right-side">
             <p class="channel-name">{{currentChannel}}</p>
@@ -38,48 +40,64 @@
              (click)="channelUsers(currentChannelId)">
       </div>
       <div class="single-chat-info" *ngIf="channelInfo" (scroll)="getScrollingElement($event, currentChannelId)">
-        <div class="chat-item" *ngFor="let message of channelInfo" [class.me]="message && message.u && message.u._id == 'BrpLPfjeWHL9Mm5Di'">
-          <div class="users-message-content" *ngIf="message && message.name && message.name.user && message.name.user.name">
-            <p class="users-name exists" *ngIf="message && message.name && message.name.user && message.name.user.name">{{message.name.user.name}}</p>
+        <div class="chat-item"
+             *ngFor="let message of channelInfo"
+             [class.me]="message && message.u && message.u._id == loginCredentials.data.userId">
+          <img *ngIf="message && message.u && message.u.username"
+               src="https://chat10.material-exchange.com/avatar/{{message.u.username}}" alt="User Name">
+          <div class="users-message-content"
+               *ngIf="message && message.name && message.name.user && message.name.user.name">
+            <p class="users-name exists"
+               *ngIf="message && message.name && message.name.user && message.name.user.name">{{message.name.user.name}}</p>
             <p class="users-message-date" *ngIf="message && message._updatedAt">{{message._updatedAt | amTimeAgo}}</p>
             <p class="users-message" *ngIf="message && message.msg">{{message.msg}}</p>
           </div>
         </div>
         <div class="loading-messages" *ngIf="loadingMessages == ''">Loading messages</div>
       </div>
+      <div class="send-message">
+        <input type="text" name="message-text" placeholder="Start typing..." [(ngModel)]="messageText"/>
+        <button (click)="sendDirectChannelMessage(currentChannel, currentChannelId, messageText)"><img
+          src="./assets/img/chat/send.svg" alt=""></button>
+      </div>
 
     </div>
     <!--Single Feed -->
-    <div class="single-chat-data feed-msgs"  [class.shown]="singleFeed">
+    <div class="single-chat-data feed-msgs" [class.shown]="singleFeed">
       <div class="top-data">
         <img (click)="getAllFeeds()" class="back-arrow" src="./assets/img/chat/back-arrow.svg"
              alt="back arrow">
         <div class="data-info">
           <div class="left-side">
-            <img style="width: 40px;" *ngIf="currentFeed && currentFeed.group && currentFeed.group.name" src="https://chat10.material-exchange.com/avatar/@{{currentFeed.group.name}}" class="channel-img" alt="Channel Name">
+            <img style="width: 40px;" *ngIf="currentFeed && currentFeed.group && currentFeed.group.name"
+                 src="https://chat10.material-exchange.com/avatar/@{{currentFeed.group.name}}" class="channel-img"
+                 alt="Channel Name">
           </div>
           <div class="right-side">
-            <p class="channel-name" *ngIf="currentFeed && currentFeed.group && currentFeed.group.name">{{currentFeed.group.name}}</p>
-<!--            <span class="channel-members" *ngIf="currentFeed && currentFeed.group && currentFeed.group.usersCount">Members: {{currentFeed.group.usersCount}}</span>-->
+            <p class="channel-name"
+               *ngIf="currentFeed && currentFeed.group && currentFeed.group.name">{{currentFeed.group.name}}</p>
+            <!--            <span class="channel-members" *ngIf="currentFeed && currentFeed.group && currentFeed.group.usersCount">Members: {{currentFeed.group.usersCount}}</span>-->
           </div>
         </div>
       </div>
       <div class="single-chat-info" *ngIf="feedMessages">
         <div class="chat-item" *ngFor="let message of feedMessages">
-          <div class="users-message-content" *ngIf="message && message.name && message.name.user && message.name.user.name">
+          <div class="users-message-content"
+               *ngIf="message && message.name && message.name.user && message.name.user.name">
             <p class="users-message" [class.full]="fullText" *ngIf="message && message.msg">{{message.msg}}</p>
-            <img *ngIf="message.msg.length > 50" src="./assets/img/home/arrow-down.svg" alt="arrow down" (click)="showFullText($event)">
+            <img *ngIf="message.msg.length > 50" src="./assets/img/home/arrow-down.svg" alt="arrow down"
+                 (click)="showFullText($event)">
             <p class="users-message-date" *ngIf="message && message._updatedAt">{{message._updatedAt | amTimeAgo}}</p>
           </div>
         </div>
         <div class="loading-messages" *ngIf="loadingMessages == ''">Loading messages</div>
       </div>
-
     </div>
     <!--Single Channel Users -->
     <div class="channel-users-list" [class.shown]="showChannelUsers">
       <div class="top-data">
-        <img (click)="channelUsers(currentChannelId)" class="back-arrow" src="./assets/img/chat/back-arrow.svg" alt="back arrow">
+        <img (click)="channelUsers(currentChannelId)" class="back-arrow" src="./assets/img/chat/back-arrow.svg"
+             alt="back arrow">
         <div class="data-info">
           <div class="left-side">
             <img src="./assets/img/chat/channel.svg" class="channel-img" alt="Channel Name">
@@ -98,12 +116,17 @@
         </div>
         <div class="peoples-list">
           <ul>
-            <li *ngFor="let user of channelMembers | filter:searchText" (click)="showSingleChatInfo(user.username, user._id)">
+            <li *ngFor="let user of channelMembers | filter:searchText"
+                (click)="showSingleChatInfo(user.username, user._id)">
               <div class="peoples-item d-flex align-content-start">
                 <div class="left-side">
-                  <img *ngIf="user && user.username; else demoUserAvatar" style="max-width: 40px; width: 100%; border-radius: 13px;" src="https://chat10.material-exchange.com/avatar/{{user.username}}" alt="">
+                  <img *ngIf="user && user.username; else demoUserAvatar"
+                       style="max-width: 40px; width: 100%; border-radius: 13px;"
+                       src="https://chat10.material-exchange.com/avatar/{{user.username}}" alt="">
                   <ng-template #demoUserAvatar>
-                    <img style="max-width: 40px; width: 100%; border-radius: 13px;" src="https://www.pngkey.com/png/detail/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png" alt="">
+                    <img style="max-width: 40px; width: 100%; border-radius: 13px;"
+                         src="https://www.pngkey.com/png/detail/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png"
+                         alt="">
                   </ng-template>
                 </div>
                 <div class="right-side col-md-10">
@@ -117,7 +140,7 @@
         </div>
       </div>
     </div>
-    <!--Single Chat - DM - Info-->
+    <!--Single Channel Chat - DM - Info-->
     <div class="single-user-information" [class.shown]="singleChatInfo">
       <div class="top-data">
         <img (click)="getBackToChannel(currentChannelId)" class="back-arrow" src="./assets/img/chat/back-arrow.svg"
@@ -125,43 +148,105 @@
         <div class="data-info">
           <div class="left-side">
             <img *ngIf="currentUser; else demoImage"
-              style="width: 40px; border-radius: 50%;" src="https://chat10.material-exchange.com/avatar/{{currentUser}}" class="channel-img" alt="Person Name">
+                 style="width: 40px; border-radius: 50%;"
+                 src="https://chat10.material-exchange.com/avatar/{{currentUser}}" class="channel-img"
+                 alt="Person Name">
             <ng-template #demoImage>
               <img
-                style="width: 40px; border-radius: 50%;" src="https://www.pngkey.com/png/detail/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png" class="channel-img" alt="Person Name">
+                style="width: 40px; border-radius: 50%;"
+                src="https://www.pngkey.com/png/detail/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png"
+                class="channel-img" alt="Person Name">
             </ng-template>
 
           </div>
           <div class="right-side">
             <p *ngIf="currentUser; else demoUser"
-              class="channel-name">{{currentUserName}}</p>
+               class="channel-name">{{currentUserName}}</p>
             <ng-template #demoUser>
               <p class="channel-name">Username</p>
             </ng-template>
           </div>
         </div>
       </div>
-      <div class="single-chat-info" *ngIf="singleChatMessages">
-        <div class="chat-item" *ngFor="let singleMessage of singleChatMessages" [class.me]="singleMessage.itsMe == 'me'">
-          <img *ngIf="singleMessage && singleMessage.u && singleMessage.u.username" src="https://chat10.material-exchange.com/avatar/{{singleMessage.u.username}}" alt="{{singleMessage.u.username}}">
+      <div class="single-chat-info">
+        <div class="chat-item" *ngFor="let singleMessage of singleChatMessages"
+             [class.me]="singleMessage.itsMe == 'me'">
+          <img *ngIf="singleMessage && singleMessage.u && singleMessage.u.username"
+               src="https://chat10.material-exchange.com/avatar/{{singleMessage.u.username}}"
+               alt="{{singleMessage.u.username}}">
           <div class="users-message-content">
             <p class="users-name"
-            *ngIf="singleMessage && singleMessage.u && singleMessage.u.username"
+               *ngIf="singleMessage && singleMessage.u && singleMessage.u.username"
             >{{ singleMessage.u.username }}</p>
             <p class="users-message-date"
-            *ngIf="singleMessage && singleMessage._updatedAt"
+               *ngIf="singleMessage && singleMessage._updatedAt"
             >{{ singleMessage._updatedAt | amTimeAgo}}</p>
             <p class="users-message"
-            *ngIf="singleMessage && singleMessage.msg"
+               *ngIf="singleMessage && singleMessage.msg"
             >{{ singleMessage.msg }}</p>
           </div>
         </div>
       </div>
       <div class="send-message">
         <input type="text" name="message-text" placeholder="Start typing..." [(ngModel)]="messageText"/>
-        <button (click)="sendDirectUserMessage(currentUser,messageText)"><img src="./assets/img/chat/send.svg" alt=""></button>
+        <button (click)="sendDirectUserMessage(currentUser,messageText)"><img src="./assets/img/chat/send.svg" alt="">
+        </button>
       </div>
     </div>
+    <!--Single Chat - DM - Info-->
+    <div class="single-user-information" [class.shown]="singleDMInfo">
+      <div class="top-data">
+        <img (click)="backToDM()" class="back-arrow" src="./assets/img/chat/back-arrow.svg"
+             alt="back arrow">
+        <div class="data-info">
+          <div class="left-side">
+            <img *ngIf="currentUser; else demoImage"
+                 style="width: 40px; border-radius: 50%;"
+                 src="https://chat10.material-exchange.com/avatar/{{currentUser}}" class="channel-img"
+                 alt="Person Name">
+            <ng-template #demoImage>
+              <img
+                style="width: 40px; border-radius: 50%;"
+                src="https://www.pngkey.com/png/detail/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png"
+                class="channel-img" alt="Person Name">
+            </ng-template>
+
+          </div>
+          <div class="right-side">
+            <p *ngIf="currentUser; else demoUser"
+               class="channel-name">{{currentUserName}}</p>
+            <ng-template #demoUser>
+              <p class="channel-name">Username</p>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="single-chat-info">
+        <div class="chat-item" *ngFor="let singleMessage of singleChatMessages"
+             [class.me]="singleMessage.itsMe == 'me'">
+          <img *ngIf="singleMessage && singleMessage.u && singleMessage.u.username"
+               src="https://chat10.material-exchange.com/avatar/{{singleMessage.u.username}}"
+               alt="{{singleMessage.u.username}}">
+          <div class="users-message-content">
+            <p class="users-name"
+               *ngIf="singleMessage && singleMessage.u && singleMessage.u.username"
+            >{{ singleMessage.u.username }}</p>
+            <p class="users-message-date"
+               *ngIf="singleMessage && singleMessage._updatedAt"
+            >{{ singleMessage._updatedAt | amTimeAgo}}</p>
+            <p class="users-message"
+               *ngIf="singleMessage && singleMessage.msg"
+            >{{ singleMessage.msg }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="send-message">
+        <input type="text" name="message-text" placeholder="Start typing..." [(ngModel)]="messageText"/>
+        <button (click)="sendDirectUserMessage(currentUser,messageText)"><img src="./assets/img/chat/send.svg" alt="">
+        </button>
+      </div>
+    </div>
+
     <div (click)="hideChat()" class="chat-toggler">
       <img src="./assets/img/chat/close-chat.svg" alt="">
     </div>
@@ -195,15 +280,18 @@
                   <div class="peoples-item d-flex align-content-start" (click)="getFeedInfo(feed._id)">
                     <div class="left-side" [class.read-only]="feed.ro == true">
                       <img style="width: 40px;" src="https://chat10.material-exchange.com/avatar/@{{feed.name}}" alt="">
-                      <img *ngIf="feed && feed.ro == true" src="./assets/img/chat/channel-lock.svg" alt="locked-channel" class="locked-channel-icon">
+                      <img *ngIf="feed && feed.ro == true" src="./assets/img/chat/channel-lock.svg" alt="locked-channel"
+                           class="locked-channel-icon">
                     </div>
                     <div class="right-side col-md-10">
                       <div class="top-part d-flex align-items-center justify-content-between">
                         <span class="peoples-name" *ngIf="feed && feed.name">{{ feed.name }}</span>
                       </div>
                       <div class="bottom-part">
-                        <span class="peoples-message" *ngIf="feed && feed.lastMessage && feed.lastMessage.msg">{{ feed.lastMessage.msg }}</span>
-                        <span class="peoples-date"*ngIf="feed && feed.lastMessage && feed.lastMessage._updatedAt" >{{ feed.lastMessage._updatedAt | amTimeAgo }}</span>
+                        <span class="peoples-message"
+                              *ngIf="feed && feed.lastMessage && feed.lastMessage.msg">{{ feed.lastMessage.msg }}</span>
+                        <span class="peoples-date"
+                              *ngIf="feed && feed.lastMessage && feed.lastMessage._updatedAt">{{ feed.lastMessage._updatedAt | amTimeAgo }}</span>
                       </div>
                     </div>
                   </div>
@@ -227,8 +315,9 @@
                 <li *ngFor="let channel of channels | filter:searchText" (click)="showSingle(channel._id)">
                   <div class="peoples-item d-flex align-content-start">
                     <div class="left-side">
-                      <img *ngIf="channel && channel.name" style="width: 40px;" src="https://chat10.material-exchange.com/avatar/{{channel.name}}" alt="channel-img">
-<!--                      <img class="locked-channel-icon" src="./assets/img/chat/channel-lock.svg" alt="locked-channel">-->
+                      <img *ngIf="channel && channel.name" style="width: 40px;"
+                           src="https://chat10.material-exchange.com/avatar/{{channel.name}}" alt="channel-img">
+                      <!--                      <img class="locked-channel-icon" src="./assets/img/chat/channel-lock.svg" alt="locked-channel">-->
                     </div>
                     <div class="right-side col-md-10">
                       <div class="top-part d-flex align-items-center justify-content-between">
@@ -256,11 +345,13 @@
           <div class="chat-wrapper-list dms">
             <div class="peoples-list">
               <ul>
-                <li *ngFor="let user of usersList | filter: searchText" (click)="showSingleChatInfo(user.username, user._id)">
+                <li *ngFor="let user of usersList | filter: searchText"
+                    (click)="showSingleDMInfo(user.username, user._id)" [class.unread-msg]="user.unread > 0">
                   <div class="peoples-item d-flex align-content-start">
                     <div class="left-side" [class.is-online]="user.status != 'offline'">
                       <div class="img-wrapper">
-                        <img style="width: 40px;" src="https://chat10.material-exchange.com/avatar/{{user.username}}" alt="channel-img">
+                        <img style="width: 40px;" src="https://chat10.material-exchange.com/avatar/{{user.username}}"
+                             alt="channel-img">
                       </div>
                     </div>
                     <div class="right-side col-md-10">
@@ -271,8 +362,10 @@
                       <div class="bottom-part">
                         <span class="peoples-date">Message: {{ user._id }}</span>
                       </div>
-                      <span class="peoples-messages" style="display: none;">
-                        <span>10</span>
+                      <span
+                        *ngIf="user.unread"
+                        class="peoples-messages">
+                        <span>{{user.unread}}</span>
                       </span>
                     </div>
                   </div>

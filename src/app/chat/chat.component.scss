@@ -96,7 +96,9 @@
               li {
                 margin: 7px 0;
                 background: #FCFCFD;
-
+                &.unread-msg {
+                  background-color: #F1F2F7;
+                }
                 &:nth-of-type(1) {
                   padding-top: 0;
                   margin-top: 0;

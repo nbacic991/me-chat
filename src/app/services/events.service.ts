@@ -268,6 +268,24 @@ export class EventsService {
     }
   }
 
+  async getFeedUserRoles(feedId): Promise<any> {
+    try {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/groups.roles?roomId=${feedId}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
+        }
+      });
+      const firstResp = await response.json();
+      return firstResp.roles;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   async getFeedMessages(groupId): Promise<any> {
     try {
       const response = await fetch(`https://chat10.material-exchange.com/api/v1/groups.messages?roomId=${groupId}`, {
@@ -390,6 +408,58 @@ export class EventsService {
 
       const firstResp = await response.json();
       return firstResp;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  /**
+   * Send Message
+   * Channel
+   */
+  async sendChannelMessage(channelId: string, messageText: string): Promise<any> {
+
+    const data = {
+      channel: '#' + channelId,
+      text: messageText
+    };
+    try {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/chat.postMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
+        },
+        body: JSON.stringify(data)
+      });
+
+      const firstResp = await response.json();
+      return firstResp;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  /**
+   * Get Channel Moderator
+   * Channel
+   */
+  async setMessageUnread(chatId): Promise<any> {
+    try {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/subscriptions.read`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
+        },
+        body: JSON.stringify({
+          'rid' : chatId
+        })
+      });
+      const resToJson = await response.json();
+      return resToJson;
     } catch (error) {
       console.log(error.message);
     }
