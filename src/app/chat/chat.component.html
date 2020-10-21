@@ -21,7 +21,7 @@
       </div>
     </div>
     <!--Single Channel -->
-    <div class="single-chat-data" [class.shown]="singleData">
+    <div class="single-chat-data channel-msgs" [class.shown]="singleData">
       <div class="top-data">
         <img (click)="getAllChannels()" class="back-arrow" src="./assets/img/chat/back-arrow.svg"
              alt="back arrow">
@@ -46,9 +46,9 @@
           <img *ngIf="message && message.u && message.u.username"
                src="https://chat10.material-exchange.com/avatar/{{message.u.username}}" alt="User Name">
           <div class="users-message-content"
-               *ngIf="message && message.name && message.name.user && message.name.user.name">
+               *ngIf="message && message.name">
             <p class="users-name exists"
-               *ngIf="message && message.name && message.name.user && message.name.user.name">{{message.name.user.name}}</p>
+               *ngIf="message && message.name">{{message.name}}</p>
             <p class="users-message-date" *ngIf="message && message._updatedAt">{{message._updatedAt | amTimeAgo}}</p>
             <p class="users-message" *ngIf="message && message.msg">{{message.msg}}</p>
           </div>
@@ -100,20 +100,23 @@
              alt="back arrow">
         <div class="data-info">
           <div class="left-side">
-            <img src="./assets/img/chat/channel.svg" class="channel-img" alt="Channel Name">
+            <img *ngIf="currentChannel" style="width: 40px;"
+                 src="https://chat10.material-exchange.com/avatar/{{currentChannel}}"
+                 class="channel-img" alt="{{currentChannel}}">
           </div>
           <div class="right-side">
             <p class="channel-name">Users list</p>
           </div>
         </div>
       </div>
+      <div class="search-filed-wrapper">
+        <input type="text" class="search-text"
+               [(ngModel)]="searchText"
+               placeholder="Search for..">
+        <button><img src="./assets/img/chat/search.svg" alt="search icon"></button>
+      </div>
       <div class="single-chat-info">
-        <div class="search-filed-wrapper">
-          <input type="text" class="search-text"
-                 [(ngModel)]="searchText"
-                 placeholder="Search for..">
-          <button><img src="./assets/img/chat/search.svg" alt="search icon"></button>
-        </div>
+
         <div class="peoples-list">
           <ul>
             <li *ngFor="let user of channelMembers | filter:searchText"
@@ -193,6 +196,7 @@
         </button>
       </div>
     </div>
+
     <!--Single Chat - DM - Info-->
     <div class="single-user-information" [class.shown]="singleDMInfo">
       <div class="top-data">
@@ -241,7 +245,7 @@
         </div>
       </div>
       <div class="send-message">
-        <input type="text" name="message-text" placeholder="Start typing..." [(ngModel)]="messageText"/>
+        <input type="text" (keypress)="keyPressDM($event)" name="message-text" placeholder="Start typing..." [(ngModel)]="messageText"/>
         <button (click)="sendDirectUserMessage(currentUser,messageText)"><img src="./assets/img/chat/send.svg" alt="">
         </button>
       </div>
@@ -346,22 +350,42 @@
             <div class="peoples-list">
               <ul>
                 <li *ngFor="let user of usersList | filter: searchText"
-                    (click)="showSingleDMInfo(user.username, user._id)" [class.unread-msg]="user.unread > 0">
+                    (click)="showSingleDMInfo(
+                    user.usernames[1] ? user.usernames[1] : user.usernames[0],
+                    user.uids.length === 2 ?
+                    user.uids[0] === loginCredentials.data.userId ? user.uids[1] : user.uids[0]
+                    :
+                    loginCredentials.data.userId
+                    )" [class.unread-msg]="user.unread > 0">
                   <div class="peoples-item d-flex align-content-start">
                     <div class="left-side" [class.is-online]="user.status != 'offline'">
-                      <div class="img-wrapper">
-                        <img style="width: 40px;" src="https://chat10.material-exchange.com/avatar/{{user.username}}"
+                      <div class="img-wrapper"
+                      *ngIf="user && user.usernames[1]; else userImg">
+                        <img style="width: 40px;" src="https://chat10.material-exchange.com/avatar/{{user.usernames[1]}}"
                              alt="channel-img">
                       </div>
+                      <ng-template #userImg>
+                        <img style="width: 40px;" src="https://chat10.material-exchange.com/avatar/{{user.usernames[0]}}"
+                             alt="channel-img">
+                      </ng-template>
                     </div>
                     <div class="right-side col-md-10">
                       <div class="top-part d-flex align-items-center justify-content-between">
-                        <span class="peoples-name">{{ user.name }}</span>
-
+                        <span class="peoples-name"
+                        *ngIf="user && user.usernames[1]; else noUsername;">{{ user.dmName }}</span>
+                        <ng-template #noUsername>
+                          <span class="peoples-name">{{user.usernames[0]}}</span>
+                        </ng-template>
                       </div>
-                      <div class="bottom-part">
-                        <span class="peoples-date">Message: {{ user._id }}</span>
+                      <div class="bottom-part"
+                      *ngIf="user && user.lastMessage && user.lastMessage.msg; else noMsg">
+                        <span class="peoples-date">Message: {{ user.lastMessage.msg }}</span>
                       </div>
+                      <ng-template #noMsg>
+                        <div class="bottom-part">
+                          <span class="peoples-date">There are no messages.</span>
+                        </div>
+                      </ng-template>
                       <span
                         *ngIf="user.unread"
                         class="peoples-messages">

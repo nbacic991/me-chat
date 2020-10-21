@@ -237,19 +237,37 @@ export class EventsService {
   /**
    * Users
    */
-  async getListOfUsers(): Promise<any> {
+  async getListOfAllUsers(): Promise<any> {
     try {
-      const response = await fetch('https://chat10.material-exchange.com/api/v1/users.list?count=200', {
+      const response = await fetch('https://chat10.material-exchange.com/api/v1/users.list?count=1000', {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
           Accept: '*/*',
           'X-Auth-Token': this.token,  // instert token from cookie
           'X-User-Id': this.userId, // instert userId from cookie
-        }
+        },
       });
       const firstResp = await response.json();
       const resToJson = firstResp.users;
+      return resToJson;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  async getListOfUsers(): Promise<any> {
+    try {
+      const response = await fetch('https://chat10.material-exchange.com/api/v1/im.list', {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
+        },
+      });
+      const firstResp = await response.json();
+      const resToJson = firstResp.ims;
       return resToJson;
     } catch (error) {
       console.log(error.message);
@@ -259,6 +277,26 @@ export class EventsService {
   async getUserInfo(userID): Promise<any> {
     try {
       const response = await fetch(`https://chat10.material-exchange.com/api/v1/users.info?userId=${userID}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          Accept: '*/*',
+          'X-Auth-Token': this.token,  // instert token from cookie
+          'X-User-Id': this.userId, // instert userId from cookie
+        },
+      });
+
+      const firstResp = await response.json();
+      // console.log(firstResp);
+      return firstResp;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async getUserInfoByUsername(userName): Promise<any> {
+    try {
+      const response = await fetch(`https://chat10.material-exchange.com/api/v1/users.info?username=${userName}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',

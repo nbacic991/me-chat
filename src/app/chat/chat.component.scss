@@ -11,15 +11,18 @@
     z-index: 200;
     max-width: 400px;
     width: 100%;
+
     .app-header {
       padding: 10px;
       height: 70px;
       background-color: #fff;
       z-index: 1;
+
       img {
         margin-left: 15px;
       }
     }
+
     .chat-tabs {
       border-bottom: 1px solid #F1F2F7;
       justify-content: space-around;
@@ -87,7 +90,8 @@
 
         .peoples {
           &-list {
-            padding: 0 10px;
+            padding: 0 10px 0 20px;
+            border-radius: 4px;
 
             ul {
               padding: 0;
@@ -96,9 +100,11 @@
               li {
                 margin: 7px 0;
                 background: #FCFCFD;
+
                 &.unread-msg {
                   background-color: #F1F2F7;
                 }
+
                 &:nth-of-type(1) {
                   padding-top: 0;
                   margin-top: 0;
@@ -106,7 +112,7 @@
 
                 .peoples-item {
                   transition: 300ms ease-in-out;
-                  padding: 10px 0 10px 20px;
+                  padding: 10px 0 10px 10px;
 
                   &:hover {
                     background-color: #F1F2F7;
@@ -346,7 +352,7 @@
       .data-info {
         display: flex;
         flex-basis: 60%;
-        text-align: center;
+        align-items: center;
 
         .channel-img {
           border-radius: 14px;
@@ -354,7 +360,7 @@
 
         .right-side {
           flex: 1;
-
+          padding-left: 15px;
           p {
             margin-bottom: 0;
             color: #43434A;
@@ -364,7 +370,8 @@
 
           span {
             color: #BBBBBB;
-            font-size: 12px;
+            font-size: 14px;
+            font-weight: 600;
           }
         }
       }
@@ -414,8 +421,8 @@
 
         .users-message-content {
           background-color: #EDEDED;
-          border-radius: 10px;
-          padding: 10px;
+          border-radius: 4px;
+          padding: 10px 36px;
           display: flex;
           flex-wrap: wrap;
           justify-content: space-between;
@@ -450,7 +457,15 @@
       }
     }
   }
-
+  .channel-users-list {
+    .search-filed-wrapper {
+      margin-top: 10px;
+    }
+    .single-chat-info {
+      top: 130px;
+      padding: 0 10px 10px 10px !important;
+    }
+  }
   .feed-msgs,
   .channel-users-list {
     .data-info {
@@ -459,6 +474,9 @@
     }
 
     .single-chat-info {
+      .search-filed-wrapper {
+        padding: 0;
+      }
       ul {
         list-style-type: none;
         padding: 0;
@@ -481,6 +499,15 @@
     }
   }
 
+  .channel-msgs {
+    .single-chat-info {
+      .chat-item {
+        .users-message-content {
+          padding: 10px !important;
+        }
+      }
+    }
+  }
   .feed-msgs {
     .single-chat-info {
       padding: 10px !important;
@@ -493,22 +520,24 @@
           margin-left: 0 !important;
           flex-basis: 100% !important;
           background-color: transparent !important;
-          transition: 300ms ease-in-out;
-          padding-right: 30px;
+          //padding-right: 30px;
           position: relative;
+          transition: 300ms ease-in-out;
           &:hover {
             background-color: #F1F2F7 !important;
           }
+
+          .users-message {
+            max-height: 40px;
+            overflow: hidden;
+          }
+
           &.full {
             .users-message {
               max-height: 9999px;
             }
           }
-          .users-message {
-            max-height: 40px;
-            overflow: hidden;
-            transition: 300ms ease-in-out;
-          }
+
           img {
             position: absolute;
             max-width: 10px;
@@ -535,6 +564,9 @@
       margin-bottom: 55px;
       display: flex;
       flex-direction: column-reverse;
+      .users-message-content {
+        padding: 10px !important;
+      }
     }
   }
 
