@@ -11,13 +11,12 @@
           <span class="breadcrumbs-separator">-</span>
           <span class="breadcrumbs-link"><a routerLink="/events">EVENTS</a></span>
           <span class="breadcrumbs-separator">-</span>
-          <span class="breadcrumbs-link">EVENTS / MILL WEEK</span>
+          <span class="breadcrumbs-link">EVENTS / {{eventItem.name}}</span>
         </div>
       </div>
       <div class="main-inner">
         <div class="container-fluid single-event">
-          <!--          <h3> Album {{eventId}}</h3>-->
-          <h1 class="single-event-title">Events / Mill Week</h1>
+          <h1 class="single-event-title">Events / {{eventItem.name}}</h1>
           <h2 class="single-event-subtitle mt-4 mb-4">Material Spotlight</h2>
           <div class="events-wrapper">
             <div class="event-video" *ngFor="let video of eventVideos; let i = index;"
@@ -27,12 +26,8 @@
           </div>
           <div class="row event-details">
             <div class="col-md-6">
-              <h3>Kingpin Show</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum.</p>
+              <h3>{{eventItem.name}}</h3>
+              <p>{{eventItem.attributes[5].value}}</p>
             </div>
             <div class="col-md-3 speakers">
               <h3>Speakers</h3>

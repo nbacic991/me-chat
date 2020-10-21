@@ -109,6 +109,7 @@ export class ChatComponent implements OnInit {
    * Channels
    */
   async showSingle(channelId): Promise<void> {
+    this.searchText = '';
     this.singleData = !this.singleData;
     this.channelData = await this.eventsService.getSingleChannelInfo(channelId);
     console.log('Channel Data: ', this.channelData);
@@ -133,11 +134,14 @@ export class ChatComponent implements OnInit {
     await Promise.all(promises);
 
   }
+
   async channelUsers(channelId): Promise<void> {
     this.showChannelUsers = !this.showChannelUsers;
     this.channelMembers = await this.eventsService.getSingleChannelUsers(channelId);
   }
+
   async getBackToChannel(channelId): Promise<void> {
+    this.searchText = '';
     this.singleChatInfo = !this.singleChatInfo;
     this.singleData = !this.singleData;
     this.channelMembers = await this.eventsService.getSingleChannelUsers(channelId);
@@ -194,6 +198,7 @@ export class ChatComponent implements OnInit {
     this.currentUserName = userInfo.user.name;
     this.currentUser = userUsername;
   }
+
   async sendDirectUserMessage(userName, messageText): Promise<void> {
     this.iSentIt = true;
     const myToken = this.cookieService.get('userNewId');
@@ -216,14 +221,17 @@ export class ChatComponent implements OnInit {
       this.iSentIt = false;
     }
   }
+
   async getUserInfo(userID): Promise<void> {
     return this.eventsService.getUserInfo(userID);
   }
+
   async getAllChannels(): Promise<void> {
     this.singleData = !this.singleData;
     this.channels = await this.eventsService.getListOfChannels();
 
   }
+
   async getAllFeeds(): Promise<any> {
     this.singleFeed = !this.singleFeed;
     this.feedList = await this.eventsService.getFeedList();
@@ -233,6 +241,7 @@ export class ChatComponent implements OnInit {
       }
     });
   }
+
   async sendDirectChannelMessage(channel: string, channelId: string, message: string): Promise<any> {
     this.messageText = '';
     this.singleChannelMessage = await this.eventsService.sendChannelMessage(channel, message);
@@ -274,14 +283,12 @@ export class ChatComponent implements OnInit {
 
     this.currentUserName = userInfo.user.name;
     this.currentUser = username;
-    console.log('Chat messages: ', this.singleChatMessages);
     const unread = await this.eventsService.setMessageUnread(this.singleChatMessages[0].rid);
-    console.log(unread);
     if (unread.success === true) {
       const notifPromise = this.subscription.update.map(async (notifItem) => {
         const RID = notifItem.rid;
         const ridSub = RID.replace(this.loginCredentials.data.userId, '');
-        this.usersList.find( (singleUser) => {
+        this.usersList.find((singleUser) => {
           const singleUserID = singleUser._id;
           if (singleUserID === ridSub) {
             singleUser.unread = 0;
@@ -297,7 +304,20 @@ export class ChatComponent implements OnInit {
     this.singleDMInfo = !this.singleDMInfo;
   }
 
+// Sending message keyboard press
+  keyPress(event: KeyboardEvent): void {
+    const self = this;
+    if (event.code === 'Enter') {
+      const channel = this.currentChannel;
+      const channelId = this.currentChannelId;
+      const message = this.messageText;
+      self.sendDirectChannelMessage(channel, channelId, message);
+    }
+  }
+
   async ngOnInit(): Promise<void> {
+
+
     // const checkLogin = this.cookieService.get('JSESSIONID');
     // if (checkLogin) {
     //   console.log('Logged In');
@@ -352,25 +372,26 @@ export class ChatComponent implements OnInit {
     realTimeAPI.onMessage(async (message: any) => {
       console.log('Message: ', message);
       if (message.msg === 'result' && message.id === '42') {
-        message.result.update.map((item) => {
-          const subID = item._id;
-          const subRID = item.rid;
-          /* Subscribtion */
-          realTimeAPI.sendMessage({
-            msg: 'sub',
-            id: subID,
-            name: 'stream-room-messages',
-            params: [
-              subRID,
-              false
-            ]
-          });
-        });
+        // message.result.update.map((item) => {
+        //   const subID = item._id;
+        //   const subRID = item.rid;
+        //   /* Subscribtion */
+        //   realTimeAPI.sendMessage({
+        //     msg: 'sub',
+        //     id: subID,
+        //     name: 'stream-room-messages',
+        //     params: [
+        //       subRID,
+        //       false
+        //     ]
+        //   });
+        // });
 
       } else if (message.msg === 'changed') {
         if (this.iSentIt === false) {
           const myToken = this.cookieService.get('userNewId');
           const res = await this.eventsService.singleUserMessages(message.fields.args[0].u.username);
+          console.log(res);
           this.toastr.success(message.fields.args[0].u.username, 'New message received from:');
           // console.log(res);
           this.singleChatMessages = res;
@@ -381,6 +402,16 @@ export class ChatComponent implements OnInit {
             }
           });
           await Promise.all(chatPromises);
+        }
+        if (message.msg === 'changed' && message.fields.eventName === 'GENERAL') {
+          console.log('It\'s a channel message:', message.fields.args);
+          const channelMsgs = await this.eventsService.getSingleChannel(message.fields.args[0].rid);
+          this.channelInfo = channelMsgs;
+          const channelPromises = this.channelInfo.map(async (item) => {
+            const userName = await this.getUserInfo(item.u._id);
+            item.name = userName;
+          });
+          await Promise.all(channelPromises);
         }
       }
     });
@@ -416,7 +447,7 @@ export class ChatComponent implements OnInit {
       const RID = notifItem.rid;
       const ridSub = RID.replace(this.loginCredentials.data.userId, '');
       if (unread > 0) {
-        this.usersList.find( (singleUser) => {
+        this.usersList.find((singleUser) => {
           const singleUserID = singleUser._id;
           if (singleUserID === ridSub) {
             singleUser.unread = unread;

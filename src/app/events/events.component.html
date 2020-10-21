@@ -18,9 +18,9 @@
           <div class="event-item">0{{num+1}}</div>
           <div class="event-header-items row">
             <div class="date col-md-3">
-              <span class="start-date">{{item.attributes[0].value | amDateFormat:'MMMM D' }}</span>
+              <span class="start-date">{{item.attributes[1].value | amDateFormat:'MMMM D' }}</span>
               -
-              <span class="end-date">{{item.attributes[2].value | amDateFormat:'MMMM D, YYYY' }}</span>
+              <span class="end-date">{{item.attributes[3].value | amDateFormat:'MMMM D, YYYY' }}</span>
             </div>
             <div class="program col-md-3">
               <span>Program</span>
@@ -29,7 +29,7 @@
           <div class="event-body-items row">
             <div class="information col-md-3">
               <div class="event-name">{{item.name}}</div>
-              <div class="event-description">{{item.attributes[4].value != '&nbsp;' ? item.attributes[4].value : 'Welcome to the most exclusive Digital Fashion Event of the year!'}}</div>
+              <div class="event-description">{{item.attributes[5].value != '&nbsp;' ? item.attributes[5].value : 'Welcome to the most exclusive Digital Fashion Event of the year!'}}</div>
               <a target="_blank" href="{{item.attributes[6].value ? '//'+item.attributes[6].value : '#' }}"
                  class="event-register-button">Register now</a>
             </div>
@@ -51,7 +51,7 @@
               <div class="event-image-overlay">
                 <img src="./assets/img/events/no_image.jpg" alt="">
               </div>
-              <a href="/events/1" class="view-more">View more <img src="./assets/img/events/arrow-right.svg" alt="arrow-right"></a>
+              <a [routerLink]="['/events/'+item.id]" class="view-more">View more <img src="./assets/img/events/arrow-right.svg" alt="arrow-right"></a>
             </div>
           </div>
 

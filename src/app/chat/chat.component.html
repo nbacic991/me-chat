@@ -55,8 +55,8 @@
         </div>
         <div class="loading-messages" *ngIf="loadingMessages == ''">Loading messages</div>
       </div>
-      <div class="send-message">
-        <input type="text" name="message-text" placeholder="Start typing..." [(ngModel)]="messageText"/>
+      <div class="send-message" id="channel-message">
+        <input type="text" name="message-text" (keypress)="keyPress($event)" placeholder="Start typing..." [(ngModel)]="messageText"/>
         <button (click)="sendDirectChannelMessage(currentChannel, currentChannelId, messageText)"><img
           src="./assets/img/chat/send.svg" alt=""></button>
       </div>

@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { EventDataService } from '../services/event-data.service';
 import { EventsService } from '../services/events.service';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-event-details',
@@ -8,8 +10,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./event-details.component.scss']
 })
 export class EventDetailsComponent implements OnInit {
-  eventDetails;
+  eventDetails: any;
   eventId;
+  eventItem: any;
 
   eventVideos = [
     {
@@ -31,12 +34,23 @@ export class EventDetailsComponent implements OnInit {
   ];
 
   constructor(
+    private titleService: Title,
     private eventsService: EventsService,
+    private eventDataService: EventDataService,
     private route: ActivatedRoute,
-  ) { }
+  ) {
+  }
 
-  ngOnInit(): void {
-    this.eventId = this.route.snapshot.params.albumId;
+  async ngOnInit(): Promise<any> {
+    this.eventId = this.route.snapshot.params.eventId;
+    this.eventDetails = await this.eventDataService.getAllEvents('ALL');
+    const eventDataPromises = this.eventDetails.data.map((item) => {
+      if (item.id === this.eventId) {
+        this.eventItem = item;
+      }
+    });
+    await Promise.all(eventDataPromises);
+    this.titleService.setTitle('Material Exchange | ' + this.eventItem.name);
     // this.eventDetails = this.eventsService.getEventData(this.eventId);
   }
 
