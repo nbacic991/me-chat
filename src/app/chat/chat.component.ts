@@ -312,12 +312,19 @@ export class ChatComponent implements OnInit {
 
   backToDM(): void {
     this.singleDMInfo = !this.singleDMInfo;
+
+    setTimeout(() => {
+      this.currentUserName = '';
+      this.currentUser = '';
+      this.singleChatMessages = [];
+      console.log('empty');
+    }, 500);
   }
 
 // Sending message keyboard press
   keyPress(event: KeyboardEvent): void {
     const self = this;
-    if (event.code === 'Enter') {
+    if (event.code === 'Enter' || event.code === 'NumpadEnter') {
       const channel = this.currentChannel;
       const channelId = this.currentChannelId;
       const message = this.messageText;
@@ -327,7 +334,7 @@ export class ChatComponent implements OnInit {
 
   keyPressDM(event: KeyboardEvent): void {
     const self = this;
-    if (event.code === 'Enter') {
+    if (event.code === 'Enter' || event.code === 'NumpadEnter') {
       const user = this.currentUser;
       const message = this.messageText;
       self.sendDirectUserMessage(user, message);
