@@ -128,7 +128,7 @@ export class ChatComponent implements OnInit {
     // });
     const promises = this.channelInfo.map(async (item) => {
       item.name = this.usersMap[item.u.username].name;
-      console.log(item);
+      // console.log(item);
     });
     await Promise.all(promises);
 
@@ -169,7 +169,7 @@ export class ChatComponent implements OnInit {
    * Users
    */
   async showSingleChatInfo(userUsername, userID): Promise<void> {
-    console.log(userID);
+    // console.log(userID);
     this.singleChatInfo = !this.singleChatInfo;
     this.singleChatMessages = await this.eventsService.singleUserMessages(userUsername);
     const userInfo = await this.eventsService.getUserInfo(userID);
@@ -278,7 +278,7 @@ export class ChatComponent implements OnInit {
       await Promise.all(promises);
 
       if (userInfo) {
-        console.log(userInfo);
+        // console.log(userInfo);
         // Get subscriptions, will respond with message from server as { msg: 'result' .... }
         realTimeAPI.sendMessage({
           msg: 'sub',
@@ -317,7 +317,7 @@ export class ChatComponent implements OnInit {
       this.currentUserName = '';
       this.currentUser = '';
       this.singleChatMessages = [];
-      console.log('empty');
+      // console.log('empty');
     }, 500);
   }
 
@@ -386,11 +386,11 @@ export class ChatComponent implements OnInit {
     this.allUsers.map((user) => {
       this.usersMap[user.username] = user;
     });
-    console.log('All users: ', this.usersMap);
+    // console.log('All users: ', this.usersMap);
     const usersPromise = this.usersList.map(async (singleUser) => {
       if (singleUser && singleUser.usernames.length > 1) {
         singleUser.dmName = this.usersMap[singleUser.usernames[1]].name;
-        console.log(singleUser);
+        // console.log(singleUser);
       }
     });
     this.channels = await this.eventsService.getListOfChannels(); // https://docs.rocket.chat/api/rest-api/methods/channels/list

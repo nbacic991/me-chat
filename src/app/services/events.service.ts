@@ -255,6 +255,7 @@ export class EventsService {
       console.log(error.message);
     }
   }
+
   async getListOfUsers(): Promise<any> {
     try {
       const response = await fetch('https://chat10.material-exchange.com/api/v1/im.list', {
@@ -379,6 +380,7 @@ export class EventsService {
       console.log(error.message);
     }
   }
+
   /**
    * Send Message
    * Channel
@@ -407,6 +409,7 @@ export class EventsService {
       console.log(error.message);
     }
   }
+
   /**
    * Get Channel Moderator
    * Channel
@@ -422,7 +425,7 @@ export class EventsService {
           'X-User-Id': this.userId, // instert userId from cookie
         },
         body: JSON.stringify({
-          'rid' : chatId
+          'rid': chatId
         })
       });
       const resToJson = await response.json();
