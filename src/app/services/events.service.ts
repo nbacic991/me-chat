@@ -10,6 +10,7 @@ import {CookieService} from 'ngx-cookie-service';
 export class EventsService {
   token: string = this.cookieService.get('chatToken');
   userId: string = this.cookieService.get('userId');
+  chatURL = 'https://chat10.material-exchange.com/api/v1';
 
   constructor(
     private http: HttpClient,
@@ -20,7 +21,7 @@ export class EventsService {
   async loginAndGetToken(user: string, password: string): Promise<any> {
     try {
       // {"ldap":true,"username":"nemanja91.bacic","ldapPass":"Skidalica991.","ldapOptions":{}}
-      const response = await fetch('https://chat10.material-exchange.com/api/v1/login', {
+      const response = await fetch(this.chatURL + '/login', {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
@@ -50,7 +51,7 @@ export class EventsService {
    */
   async getFeedList(): Promise<any> {
     try {
-      const response = await fetch('https://chat10.material-exchange.com/api/v1/groups.list', {
+      const response = await fetch(this.chatURL + '/groups.list', {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -69,7 +70,7 @@ export class EventsService {
 
   async getListOfChannels(): Promise<any> {
     try {
-      const response = await fetch('https://chat10.material-exchange.com/api/v1/channels.list', {
+      const response = await fetch(this.chatURL + '/channels.list', {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -88,7 +89,7 @@ export class EventsService {
 
   async getSingleChannel(channelId): Promise<any> {
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/channels.messages?roomId=${channelId}&count=20&offset=0`, {
+      const response = await fetch(this.chatURL + `/channels.messages?roomId=${channelId}&count=20&offset=0`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -113,7 +114,7 @@ export class EventsService {
   async loadMoreChannelMessages(channelId, offsetNum): Promise<any> {
     console.log(offsetNum);
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/channels.messages?roomId=${channelId}&count=5&offset=${offsetNum}`, {
+      const response = await fetch(this.chatURL + `/channels.messages?roomId=${channelId}&count=5&offset=${offsetNum}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -137,7 +138,7 @@ export class EventsService {
 
   async getSingleChannelInfo(channelId): Promise<any> {
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/channels.info?roomId=${channelId}`, {
+      const response = await fetch(this.chatURL + `/channels.info?roomId=${channelId}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -159,7 +160,7 @@ export class EventsService {
 
   async getSingleChannelUsers(channelId): Promise<any> {
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/channels.members?roomId=${channelId}&count=200`, {
+      const response = await fetch(this.chatURL + `/channels.members?roomId=${channelId}&count=200`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -181,7 +182,7 @@ export class EventsService {
    */
   async getFeedInfo(groupId): Promise<any> {
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/groups.info?roomId=${groupId}`, {
+      const response = await fetch(this.chatURL + `/groups.info?roomId=${groupId}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -199,7 +200,7 @@ export class EventsService {
 
   async getFeedUserRoles(feedId): Promise<any> {
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/groups.roles?roomId=${feedId}`, {
+      const response = await fetch(this.chatURL + `/groups.roles?roomId=${feedId}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -217,7 +218,7 @@ export class EventsService {
 
   async getFeedMessages(groupId): Promise<any> {
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/groups.messages?roomId=${groupId}`, {
+      const response = await fetch(this.chatURL + `/groups.messages?roomId=${groupId}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -239,7 +240,7 @@ export class EventsService {
    */
   async getListOfAllUsers(): Promise<any> {
     try {
-      const response = await fetch('https://chat10.material-exchange.com/api/v1/users.list?count=1000', {
+      const response = await fetch(this.chatURL + '/users.list?count=1000', {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -258,7 +259,7 @@ export class EventsService {
 
   async getListOfUsers(): Promise<any> {
     try {
-      const response = await fetch('https://chat10.material-exchange.com/api/v1/im.list', {
+      const response = await fetch(this.chatURL + '/im.list', {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -277,7 +278,7 @@ export class EventsService {
 
   async getUserInfo(userID): Promise<any> {
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/users.info?userId=${userID}`, {
+      const response = await fetch(this.chatURL + `/users.info?userId=${userID}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -297,7 +298,7 @@ export class EventsService {
 
   async getUserInfoByUsername(userName): Promise<any> {
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/users.info?username=${userName}`, {
+      const response = await fetch(this.chatURL + `/users.info?username=${userName}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -317,7 +318,7 @@ export class EventsService {
 
   async singleUserMessages(userUsername): Promise<any> {
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/im.messages?username=${userUsername}`, {
+      const response = await fetch(this.chatURL + `/im.messages?username=${userUsername}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -337,7 +338,7 @@ export class EventsService {
 
   async getSubscription(): Promise<any> {
     try {
-      const response = await fetch('https://chat10.material-exchange.com/api/v1/subscriptions.get', {
+      const response = await fetch(this.chatURL + '/subscriptions.get', {
         method: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -363,7 +364,7 @@ export class EventsService {
       text: messageText
     };
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/chat.postMessage`, {
+      const response = await fetch(this.chatURL + `/chat.postMessage`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -392,7 +393,7 @@ export class EventsService {
       text: messageText
     };
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/chat.postMessage`, {
+      const response = await fetch(this.chatURL + `/chat.postMessage`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -416,7 +417,7 @@ export class EventsService {
    */
   async setMessageUnread(chatId): Promise<any> {
     try {
-      const response = await fetch(`https://chat10.material-exchange.com/api/v1/subscriptions.read`, {
+      const response = await fetch(this.chatURL + `/subscriptions.read`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',

@@ -30,47 +30,6 @@ export class EventDataService {
       });
       const resToJson = await response.json();
       return resToJson;
-      // const csrfToken = await this.http.get(csrfUrl, {
-      //   withCredentials: true
-      // }).subscribe(
-      //   async (res) => {
-      //     console.log('CSRF response: ', res);
-      //     // const response = await fetch(eventsUrl, {
-      //     //   method: 'POST',
-      //     //   headers: {
-      //     //     'Content-type': 'application/json',
-      //     //     CSRF_NONCE: res['items'][0]['attributes']['nonce'],
-      //     //     Accept: '*/*',
-      //     //   },
-      //     //   credentials: 'include',
-      //     //   body: JSON.stringify('ALL')
-      //     // });
-      //     // const resToJson = await response.json();
-      //     // return resToJson;
-      //     const eventResponse = await this.http.post(eventsUrl, JSON.stringify('ALL'), {
-      //       withCredentials: true,
-      //       headers: {
-      //         'Content-type': 'application/json',
-      //         //     // tslint:disable-next-line:no-string-literal
-      //         CSRF_NONCE: res['items'][0]['attributes']['nonce'],
-      //         // Accept: '*/*'
-      //       },
-      //     }).subscribe(
-      //       (eveRes) => {
-      //         console.log('Event res: ', eveRes);
-      //       },
-      //       (eveErr) => {
-      //         console.log('Event err: ', eveErr);
-      //       }
-      //     );
-      //     const newEventsData = eventResponse;
-      //     console.log('New Events Data: ', newEventsData);
-      //     return newEventsData;
-      //   },
-      //   (err) => {
-      //     console.log('CSRF Error: ', err);
-      //   }
-      // );
 
     } catch (error) {
       console.log('CSRF error:', error);
