@@ -158,9 +158,9 @@ export class ChatComponent implements OnInit {
     }
 
     this.feedMessages = await this.eventsService.getFeedMessages(groupId);
+    // console.log(this.usersMap);
     const promises = this.feedMessages.map(async (item) => {
-      const userName = await this.getUserInfo(item.u._id);
-      item.name = userName;
+      item.name = this.usersMap[item.u.username].name;
     });
     await Promise.all(promises);
   }

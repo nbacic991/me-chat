@@ -83,7 +83,7 @@
       <div class="single-chat-info" *ngIf="feedMessages">
         <div class="chat-item" *ngFor="let message of feedMessages">
           <div class="users-message-content"
-               *ngIf="message && message.name && message.name.user && message.name.user.name">
+               *ngIf="message && message.name">
             <p class="users-message" [class.full]="fullText" *ngIf="message && message.msg">{{message.msg}}</p>
             <img *ngIf="message.msg.length > 50" src="./assets/img/home/arrow-down.svg" alt="arrow down"
                  (click)="showFullText($event)">
